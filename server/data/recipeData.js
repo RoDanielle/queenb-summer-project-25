@@ -2,6 +2,7 @@ const recipes = [
   {
     title: "Chocolate Layer Cake",
     description: "Rich chocolate cake with a creamy filling and ganache topping.",
+     image: "https://sallysbakingaddiction.com/wp-content/uploads/2013/04/triple-chocolate-cake-4.jpg",
     sections: [
       {
         name: "Cake Batter",
@@ -51,6 +52,7 @@ const recipes = [
   {
     title: "Classic Pancakes",
     description: "Fluffy breakfast pancakes.",
+    image: "https://www.thedailymeal.com/img/gallery/classic-pancakes/pancakes-shutterstock.JPG",
     sections: [
       {
         name: "Batter",
@@ -77,6 +79,7 @@ const recipes = [
   {
     title: "Spaghetti Bolognese",
     description: "Classic Italian pasta with rich meat sauce.",
+    image: "https://feelgoodfoodie.net/wp-content/uploads/2023/04/Pasta-Bolognese-TIMG.jpg",
     sections: [
       {
         name: "Sauce",
