@@ -1,0 +1,24 @@
+import api from './api'; // your axios instance
+
+export const getAllRecipes = async () => {
+  const res = await api.get('/recipes');
+  //console.log(res.data); 
+  return res.data.recipes; // access the array inside the object
+};
+
+export const getRecipeById = async (id) => {
+  const res = await api.get(`/recipes/${id}`);
+  return res.data.recipe; 
+};
+
+export const getRecipesByCategory = async (category) => {
+  const res = await api.get('/recipes', { params: { category } });
+  return res.data.recipe;
+};
+
+export const getRecipesByTags = async (tags) => {
+  const res = await api.get('/recipes', { params: { tags } });
+  return res.data.recipe;
+};
+
+// You can also add createRecipe, updateRecipe, etc.

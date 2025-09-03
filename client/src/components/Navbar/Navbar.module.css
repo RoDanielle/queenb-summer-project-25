@@ -1,0 +1,34 @@
+/* Navbar.module.css */
+.navbar {
+  position: fixed; /* stays on top */
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #53474F;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 30px;
+  z-index: 1000;
+  transition: top 0.3s; /* smooth hide/reveal */
+}
+
+.logo {
+  height: 60px;
+}
+
+.navLinks {
+  display: flex;
+  gap: 20px;
+}
+
+.navLink {
+  color: white;
+  text-decoration: none;
+  font-size: 1.2em;
+}
+
+.navLink:hover {
+  text-decoration: underline;
+}

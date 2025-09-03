@@ -1,40 +1,11 @@
-/* App.module.css */
 .app {
   text-align: center;
 }
 
-.appHeader {
-  background-color: #53474F;
-  padding: 5px 30px 5px 30px;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.appLogo {
-  height: 100px;
-}
-
-.appNav {
-  display: flex;
-  gap: 20px;
-}
-
-.appLink {
-  color: white;
-  text-decoration: none;
-  font-size: 1.2em;
-}
-
-.appLink:hover {
-  text-decoration: underline;
-}
-
 .main {
   padding: 20px;
-  background-color: #FFDCE8;
-  height: 100vh;
+  background-color: #f6fdde;
+  min-height: 100vh; /* better than height: 100vh so footer works properly */
 }
 
 .footer {
@@ -46,4 +17,3 @@
   bottom: 0;
   text-align: center;
 }
-  

@@ -1,25 +1,27 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
-import Home from './pages/HomePage/HomePage';
-import styles from './styles/App.module.css';
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+// pages & components
+import Home from "./pages/HomePage/HomePage";
+import NewRecipe from "./pages/NewRecipe/NewRecipe"; 
+import RecipePage from './pages/RecipePage/RecipePage';
+import Navbar from "./components/Navbar/Navbar";
+// styles
+import styles from "./styles/App.module.css";
 
 function App() {
   return (
     <BrowserRouter>
       <div className={styles.app}>
-        <header className={styles.appHeader}>
-          <img src="/project-logo.png" alt="Logo" className={styles.appLogo} />
-          <nav className={styles.appNav}>
-            <Link to="/" className={styles.appLink}>Home</Link>
-          </nav>
-        </header>
+        <Navbar />
         <main className={styles.main}>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/new" element={<NewRecipe />} />
+            <Route path="/recipes/:id" element={<RecipePage />} />
           </Routes>
         </main>
         <footer className={styles.footer}>
-          <p>&copy; 2024 My App</p>
+          <p>&copy; 2025 My App</p>
         </footer>
       </div>
     </BrowserRouter>
