@@ -4,13 +4,14 @@
 
 .main {
   padding: 20px;
-  background-color: #f6fdde;
+  background-color: #f7e5f0;
   min-height: 100vh; /* better than height: 100vh so footer works properly */
 }
 
 .footer {
-  padding: 10px;
-  background-color: #53474F;
+  padding: 0.1px 0;           /* thinner vertical padding */
+  font-size: 0.7rem;        /* optional: smaller text */
+  background-color: #c4c4c4;
   color: white;
   position: fixed;
   width: 100%;
