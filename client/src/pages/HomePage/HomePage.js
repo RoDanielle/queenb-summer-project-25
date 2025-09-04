@@ -1,7 +1,7 @@
-import React, { useContext } from 'react'; // ✅ import useContext
-import styles from './Home.module.css';
-import { RecipeContext } from '../../context/RecipeContext';
-import RecipeCard from '../../components/RecipeCard/RecipeCard';
+import React, { useContext } from "react";
+import { RecipeContext } from "../../context/RecipeContext";
+import RecipeList from "../../components/RecipeList/RecipeList";
+import styles from "./Home.module.css";
 
 const Home = () => {
   const { recipes, loading, error } = useContext(RecipeContext);
@@ -12,11 +12,7 @@ const Home = () => {
   return (
     <div className={styles.home}>
       <h1 className={styles.headline}>Let's get cooking</h1>
-      <div className={styles.recipes}>
-        {recipes.map(recipe => (
-          <RecipeCard key={recipe._id} recipe={recipe} />
-        ))}
-      </div>
+      <RecipeList recipes={recipes} />
     </div>
   );
 };
