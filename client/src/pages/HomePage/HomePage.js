@@ -12,7 +12,7 @@ const Home = () => {
   return (
     <div className={styles.home}>
       <h1 className={styles.headline}>Let's get cooking</h1>
-      <RecipeList recipes={recipes} />
+      <RecipeList recipes={recipes} full={false} />
     </div>
   );
 };
