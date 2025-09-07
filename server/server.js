@@ -3,11 +3,15 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 // routes import
-const recipeRoutes = require('./routes/recipe')
+const recipeRoutes = require('./routes/recipe');
+const userRoutes = require('./routes/user');
+
 // models import
-const Recipe = require('./models/RecipeModel');   
+const Recipe = require('./models/RecipeModel');  
+const User = require('./models/UserModel');
 // Data import 
 const recipeData = require('./data/recipeData'); 
+const userData = require('./data/userData');
 
 dotenv.config();
 
@@ -28,6 +32,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/api/recipes', recipeRoutes);
+app.use('/api/users', userRoutes);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
@@ -39,6 +44,11 @@ mongoose.connect(process.env.MONGO_URI)
     if (recipeCount === 0) {
       await Recipe.insertMany(recipeData);
       console.log(`Seeded ${recipeData.length} recipes`);
+    }
+    const userCount = await User.countDocuments();
+    if (userCount === 0) {
+      await User.insertMany(userData);
+      console.log(`Seeded ${userData.length} users`);
     }
 
     app.listen(PORT, () => {
