@@ -20,32 +20,41 @@ const RecipeCard = ({ recipe, full = false }) => {
 
       {/* EXTRA INFO only in full mode */}
       {full && (
-        <>
-          <p>
-            <strong>Category:</strong> {recipe.category}
-          </p>
-          <p>
-            <strong>Tags:</strong> {recipe.tags.join(', ')}
-          </p>
+  <>
+    <p>
+      <strong>Category:</strong> {recipe.category}
+    </p>
+    <p>
+      <strong>Tags:</strong> {recipe.tags.join(', ')}
+    </p>
 
-          {recipe.sections.map((section, index) => (
-            <div key={index} className={styles.section}>
-              <h4>{section.name}</h4>
-              <p>
-                <strong>Ingredients:</strong>{' '}
-                {section.ingredients
-                  .map((ing) => `${ing.quantity} ${ing.name}`)
-                  .join(', ')}
-              </p>
-              <ol>
-                {section.instructions.map((step, k) => (
-                  <li key={k}>{step}</li>
-                ))}
-              </ol>
-            </div>
+    {/* ALL INGREDIENTS */}
+    <div className={styles.section}>
+      <h3>Ingredients:</h3>
+      {recipe.sections.map((section, i) => (
+        <div key={i}>
+          <h4>{section.name}:</h4>
+          {section.ingredients.map((ing, j) => (
+            <p key={j}>{ing.quantity} {ing.name}</p>
           ))}
-        </>
-      )}
+        </div>
+      ))}
+    </div>
+
+    {/* ALL INSTRUCTIONS */}
+    <div className={styles.section}>
+      <h3>Instructions:</h3>
+      {recipe.sections.map((section, i) => (
+        <div key={i}>
+          <h4>{section.name}:</h4>
+          {section.instructions.map((step, k) => (
+            <p key={k}>{step}</p>
+          ))}
+        </div>
+      ))}
+    </div>
+  </>
+)}
 
       {/* VIEW BUTTON only if NOT full mode */}
       {!full && (
