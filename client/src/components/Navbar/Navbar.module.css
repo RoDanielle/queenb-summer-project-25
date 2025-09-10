@@ -3,26 +3,29 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 50px;           /* thinner navbar */
+  height: 50px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; /* space between left, center, right */
   padding: 0 20px;
   background-color: #c4c4c4;
   color: white;
   z-index: 1000;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-sizing: border-box;
 }
 
 .logo {
-  height: 50px;            /* smaller logo to match thinner navbar */
+  height: 50px;
+  flex-shrink: 0; /* prevent logo from shrinking */
 }
 
 .centerNav {
-  flex: 1;                 /* takes all space between logo and rightNav */
   display: flex;
-  justify-content: center;  /* center links horizontally */
+  justify-content: center;
   gap: 25px;
+  flex-shrink: 1; /* allow it to shrink if needed */
+  overflow: hidden; /* prevent overflowing links */
 }
 
 .navLink {
@@ -30,6 +33,7 @@
   text-decoration: none;
   font-size: 1rem;
   transition: color 0.2s ease-in-out;
+  white-space: nowrap;
 }
 
 .navLink:hover {
@@ -37,5 +41,37 @@
 }
 
 .rightNav {
-  width: 35px;             /* balances the left logo */
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0; /* never shrink */
+  white-space: nowrap; /* prevent text wrapping */
+}
+
+.navButton {
+  background-color: #d4ab07;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.navButton:hover {
+  background-color: #b68e05;
+}
+
+.navUser {
+  font-size: 0.9rem;
+  color: white;
+}
+
+.userContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap; /* prevents wrapping */
 }

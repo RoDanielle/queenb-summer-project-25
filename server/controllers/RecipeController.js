@@ -1,77 +1,99 @@
 const Recipe = require('../models/RecipeModel');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
-// get all Recipes
-const getAllRecipes = async (req, res) => {
-    try {
-        const recipes = await Recipe.find();
-        res.status(200).json({recipes});
-    } catch (err) {
-        res.status(400).json({mssg: 'error getting recipes', err})
+// Get all recipes (any authenticated user)
+const getAllRecipes = async (req, res, next) => {
+  try {
+    const recipes = await Recipe.find();
+    res.status(200).json({ recipes });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Get a single recipe by ID
+const getSingleRecipe = async (req, res, next) => {
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.status(404);
+    return next(new Error('No such recipe'));
+  }
+
+  try {
+    const recipe = await Recipe.findById(id);
+    if (!recipe) {
+      res.status(404);
+      throw new Error('Recipe not found');
     }
-}
+    res.status(200).json({ recipe });
+  } catch (err) {
+    next(err);
+  }
+};
 
-// get a single Recipe
-const getSingleRecipe = async (req, res) => {
-    const {id} = req.params;
-    if(!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(404).json({error: 'No such recipe'})
+// Create a new recipe (admin only)
+const createRecipe = async (req, res, next) => {
+  const { title, description, sections, category, tags } = req.body;
+
+  try {
+    const recipe = await Recipe.create({ title, description, sections, category, tags });
+    res.status(201).json({ recipe });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Update a recipe by ID (admin only)
+const updateRecipe = async (req, res, next) => {
+  const { id } = req.params;
+  const { title, description, sections, category, tags } = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.status(404);
+    return next(new Error('No such recipe'));
+  }
+
+  try {
+    const recipe = await Recipe.findByIdAndUpdate(
+      id,
+      { title, description, sections, category, tags },
+      { new: true }
+    );
+    if (!recipe) {
+      res.status(404);
+      throw new Error('Recipe not found');
     }
+    res.status(200).json({ recipe });
+  } catch (err) {
+    next(err);
+  }
+};
 
-    try {
-        const recipe = await Recipe.findById(id);
-        res.status(200).json({recipe});
-    } catch (err) {
-        res.status(400).json({mssg: 'error getting recipe', err})
+// Delete a recipe by ID (admin only)
+const deleteRecipe = async (req, res, next) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.status(404);
+    return next(new Error('No such recipe'));
+  }
+
+  try {
+    const recipe = await Recipe.findByIdAndDelete(id);
+    if (!recipe) {
+      res.status(404);
+      throw new Error('Recipe not found');
     }
-}
-
-// post (create) a new Recipe
-const createRecipe = async (req, res) => {
-    const {title, description, sections, category, tags} = req.body;
-
-    try {
-        const recipe = await Recipe.create({title, description, sections, category, tags});
-        res.status(200).json({recipe});
-    } catch (err) {
-        res.status(400).json({mssg: 'error creating recipe', err})
-    }
-}
-
-// delete a Recipe by id
-const deleteRecipe = async (req, res) => {
-    const {id} = req.params;
-
-    if(!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(404).json({error: 'No such recipe'})
-    }
-    
-    try {
-        const recipe = await Recipe.findByIdAndDelete(id);
-        res.status(200).json({recipe});
-    } catch (err) {
-        res.status(400).json({mssg: 'error deleting recipe', err})
-    }
-}
-
-// update a Recipe by id
-const updateRecipe = async (req, res) => {
-    const {id} = req.params;
-    const {title, description, sections, category, tags} = req.body;
-
-    try {
-        const recipe = await Recipe.findByIdAndUpdate(id, {title, description, sections, category, tags}, {new: true});
-        res.status(200).json({recipe});
-    } catch (err) {
-        res.status(400).json({mssg: 'error updating recipe', err})
-    }
-}
-
+    res.status(200).json({ recipe });
+  } catch (err) {
+    next(err);
+  }
+};
 
 module.exports = {
-    getAllRecipes,
-    getSingleRecipe,
-    createRecipe,
-    deleteRecipe,
-    updateRecipe,
-}
+  getAllRecipes,
+  getSingleRecipe,
+  createRecipe,
+  updateRecipe,
+  deleteRecipe,
+};

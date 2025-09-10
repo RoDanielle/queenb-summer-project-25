@@ -1,33 +1,24 @@
 const express = require('express');
-const { getAllRecipes,
-    getSingleRecipe,
-    createRecipe,
-    deleteRecipe,
-    updateRecipe,
- } = require('../controllers/RecipeController')
-const router = express.Router()
+const {
+  getAllRecipes,
+  getSingleRecipe,
+  createRecipe,
+  updateRecipe,
+  deleteRecipe,
+} = require('../controllers/RecipeController');
 
-/**
- * Read Only Permission Routes
- */
+const verifyToken = require('../middleware/authMiddleware');
+const adminOnly = require('../middleware/adminMiddleware');
 
-// GET all Recipes
-router.get('/', getAllRecipes)
+const router = express.Router();
 
-// GET a single Recipe
-router.get('/:id', getSingleRecipe)
+// PUBLIC: anyone can view recipes
+router.get('/', getAllRecipes);
+router.get('/:id', getSingleRecipe);
 
-/**
- * Read and Write Permission Routes
- */
+// ADMIN ONLY: creating, updating, deleting recipes
+router.post('/', verifyToken, adminOnly, createRecipe);
+router.patch('/:id', verifyToken, adminOnly, updateRecipe);
+router.delete('/:id', verifyToken, adminOnly, deleteRecipe);
 
-// POST (create) a new Recipe
-router.post('/', createRecipe)
-
-// DELETE a Recipe by id
-router.delete('/:id', deleteRecipe)
-
-// UPDATE a Recipe by id
-router.patch('/:id', updateRecipe)
-
-module.exports = router
+module.exports = router;

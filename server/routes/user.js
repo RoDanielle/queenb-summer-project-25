@@ -1,33 +1,28 @@
 const express = require('express');
-const { getAllUsers,
-    getSingleUser,
-    createUser,
-    deleteUser,
-    updateUser,
- } = require('../controllers/userController')
-const router = express.Router()
+const {
+  getAllUsers,
+  getSingleUser,
+  createUser,
+  deleteUser,
+  updateUser,
+} = require('../controllers/userController');
 
-/**
- * Read Only Permission Routes
- */
+const verifyToken = require('../middleware/authMiddleware');
+const adminOnly = require('../middleware/adminMiddleware');
 
-// GET all Users
-router.get('/', getAllUsers)
+const router = express.Router();
 
-// GET a single User
-router.get('/:id', getSingleUser)
+// Protect all routes: only authenticated admins can manage users
+router.use(verifyToken);
+router.use(adminOnly);
 
-/**
- * Read and Write Permission Routes
- */
+// Read-only routes
+router.get('/', getAllUsers);          // Get all users
+router.get('/:id', getSingleUser);     // Get a single user
 
-// POST (create) a new User
-router.post('/', createUser)
+// Read/write routes
+router.post('/', createUser);          // Create a new user (admin only)
+router.patch('/:id', updateUser);      // Update user info
+router.delete('/:id', deleteUser);     // Delete user
 
-// DELETE a User by id
-router.delete('/:id', deleteUser)
-
-// UPDATE a User by id
-router.patch('/:id', updateUser)
-
-module.exports = router
+module.exports = router;
