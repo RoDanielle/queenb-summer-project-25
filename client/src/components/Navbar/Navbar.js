@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Button from "../Button/Button";
 import styles from "./Navbar.module.css";
 
 const Navbar = ({ user, setUser }) => {
@@ -14,30 +15,37 @@ const Navbar = ({ user, setUser }) => {
 
   return (
     <nav className={styles.navbar}>
+      {/* Logo */}
       <Link to="/">
         <img src="/project-logo.png" alt="Logo" className={styles.logo} />
       </Link>
 
+      {/* Center nav */}
       <div className={styles.centerNav}>
         {user && (
-          <Link to="/new" className={styles.navLink}>
+          <Button to="/new" variant="primary">
             New Recipe
-          </Link>
+          </Button>
         )}
       </div>
 
+      {/* Right nav */}
       <div className={styles.rightNav}>
         {!user ? (
           <>
-            <Link to="/login" className={styles.navButton}>Login</Link>
-            <Link to="/register" className={styles.navButton}>Register</Link>
+            <Button to="/login" variant="primary">
+              Login
+            </Button>
+            <Button to="/register" variant="secondary">
+              Register
+            </Button>
           </>
         ) : (
           <div className={styles.userContainer}>
             <span className={styles.navUser}>Hello, {user.name}</span>
-            <button onClick={handleLogout} className={styles.navButton}>
+            <Button onClick={handleLogout} variant="danger">
               Logout
-            </button>
+            </Button>
           </div>
         )}
       </div>

@@ -1,11 +1,14 @@
 .recipeCard {
   background-color: #fff;
-  padding: 15px;
+  padding: 10px;
   margin: 10px;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   text-align: left;
   transition: transform 0.2s;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* allows card to expand naturally in a grid */
 }
 
 .recipeCard:hover {
@@ -13,38 +16,73 @@
 }
 
 .recipeCard h2 {
-  margin: 0 0 10px 0;
-  font-size: 1.4rem;
+  margin: 0 0 8px 0;
+  font-size: 1.2rem;
 }
 
 .recipeCard h4 {
-  margin: 10px 0 5px 0;
-  font-size: 1.1rem;
+  margin: 8px 0 4px 0;
+  font-size: 1rem;
 }
 
 .recipeCard p {
-  margin: 5px 0;
-  font-size: 0.95rem;
-}
-
-.viewButton {
-  margin-top: 10px;
-  padding: 8px 12px;
-  border: none;
-  background-color: #f0e4ec;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.viewButton:hover {
-  background-color: #d4d4b5;
+  margin: 4px 0;
+  font-size: 0.85rem;
+  flex-grow: 0;
 }
 
 .recipeImage {
   width: 100%;
-  height: 150px;
+  height: 120px;
   object-fit: cover;
   border-radius: 10px 10px 0 0;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
+}
+
+/* Button at bottom-left */
+.recipeCard .button {
+  margin-top: auto; /* push button to bottom */
+  align-self: flex-start; /* left-align */
+  padding: 4px 8px;
+  font-size: 0.8rem;
+}
+
+/* RESPONSIVE: adjust for small screens */
+@media (max-width: 600px) {
+  .recipeCard {
+    padding: 8px;
+  }
+
+  .recipeCard h2 {
+    font-size: 1rem;
+  }
+
+  .recipeCard h4 {
+    font-size: 0.9rem;
+  }
+
+  .recipeCard p {
+    font-size: 0.8rem;
+  }
+
+  .recipeImage {
+    height: 100px;
+  }
+
+  .recipeCard .button {
+    padding: 3px 6px;
+    font-size: 0.75rem;
+  }
+}
+
+/* RESPONSIVE: very small mobile screens */
+@media (max-width: 400px) {
+  .recipeCard {
+    margin: 5px;
+  }
+
+  .recipeCard .button {
+    padding: 2px 5px;
+    font-size: 0.7rem;
+  }
 }
