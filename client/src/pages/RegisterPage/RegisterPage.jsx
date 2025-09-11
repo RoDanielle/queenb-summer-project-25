@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./RegisterPage.module.css";
+import { UserContext } from "../../context/UserContext"; // import context
 
-const RegisterPage = ({ setUser }) => {
+const RegisterPage = () => {
+  const { login } = useContext(UserContext); // use login from context
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,7 +16,6 @@ const RegisterPage = ({ setUser }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Frontend password confirmation check
     if (password !== passwordConfirm) {
       setError("Passwords do not match");
       return;
@@ -34,12 +35,10 @@ const RegisterPage = ({ setUser }) => {
         return;
       }
 
-      // Save user info and token
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
-      setUser(data.user);
+      // ✅ Update context and localStorage
+      login(data.user, data.token);
 
-      navigate("/"); // redirect to home
+      navigate("/"); // redirect to homepage
     } catch (err) {
       setError("Something went wrong. Please try again.");
     }
