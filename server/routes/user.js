@@ -5,6 +5,8 @@ const {
   createUser,
   deleteUser,
   updateUser,
+  getCurrentUser,
+  toggleFavorite,
 } = require('../controllers/userController');
 
 const verifyToken = require('../middleware/authMiddleware');
@@ -24,5 +26,9 @@ router.get('/:id', getSingleUser);     // Get a single user
 router.post('/', createUser);          // Create a new user (admin only)
 router.patch('/:id', updateUser);      // Update user info
 router.delete('/:id', deleteUser);     // Delete user
+
+// Routes for logged-in users (regular user access)
+router.get('/me', verifyToken, getCurrentUser);
+router.patch('/favorites/:recipeId', verifyToken, toggleFavorite);
 
 module.exports = router;

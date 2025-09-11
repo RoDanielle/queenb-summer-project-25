@@ -100,4 +100,59 @@ const updateUser = async (req, res, next) => {
   }
 };
 
-module.exports = { getAllUsers, getSingleUser, createUser, deleteUser, updateUser };
+// Get current logged-in user (requires auth middleware)
+const getCurrentUser = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id).populate('favorites');
+    if (!user) {
+      res.status(404);
+      throw new Error('User not found');
+    }
+    res.status(200).json({ user });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Toggle a recipe in favorites (requires auth middleware)
+const toggleFavorite = async (req, res, next) => {
+  const { recipeId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(recipeId)) {
+    res.status(400);
+    return next(new Error('Invalid recipe ID'));
+  }
+
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      res.status(404);
+      throw new Error('User not found');
+    }
+
+    const index = user.favorites.indexOf(recipeId);
+    if (index === -1) {
+      // Add to favorites
+      user.favorites.push(recipeId);
+    } else {
+      // Remove from favorites
+      user.favorites.splice(index, 1);
+    }
+
+    await user.save();
+    res.status(200).json({ favorites: user.favorites });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = {
+  getAllUsers,
+  getSingleUser,
+  createUser,
+  deleteUser,
+  updateUser,
+  getCurrentUser,
+  toggleFavorite
+};
+

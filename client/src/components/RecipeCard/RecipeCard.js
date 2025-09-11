@@ -1,34 +1,78 @@
-import React from 'react';
-import Button from '../Button/Button'; // import the reusable Button
+import React, { useState, useEffect } from 'react';
+import Button from '../Button/Button';
 import styles from './RecipeCard.module.css';
 
-const RecipeCard = ({ recipe, full = false }) => {
+const RecipeCard = ({ recipe, full = false, user, setUser }) => {
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  // Update heart color whenever user or recipe changes
+  useEffect(() => {
+    if (user && Array.isArray(user.favorites)) {
+      setIsFavorite(
+        user.favorites.map(f => f.toString()).includes(recipe._id.toString())
+      );
+    } else {
+      setIsFavorite(false);
+    }
+  }, [user, recipe._id]);
+
+  // Toggle favorite status
+  const handleToggleFavorite = async () => {
+    if (!user) {
+      alert('You must be logged in to favorite recipes.');
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) throw new Error('No token found');
+
+      const res = await fetch(
+        `http://localhost:5000/api/users/favorites/${recipe._id}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!res.ok) {
+        if (res.status === 403)
+          throw new Error('Unauthorized. Token may be invalid.');
+        throw new Error('Failed to update favorites');
+      }
+
+      const data = await res.json();
+      const favorites = Array.isArray(data.favorites) ? data.favorites : [];
+
+      // Update user state and heart color
+      setUser({ ...user, favorites });
+      setIsFavorite(favorites.map(f => f.toString()).includes(recipe._id.toString()));
+    } catch (err) {
+      console.error(err);
+      alert(err.message);
+    }
+  };
+
   return (
-    <div className={styles.recipeCard}>
+    <div className={`${styles.recipeCard} ${full ? styles.full : styles.compact}`}>
       {/* IMAGE */}
       {recipe.image && (
-        <img
-          src={recipe.image}
-          alt={recipe.title}
-          className={styles.recipeImage}
-        />
+        <img src={recipe.image} alt={recipe.title} className={styles.recipeImage} />
       )}
 
       {/* TITLE + DESCRIPTION */}
       <h2>{recipe.title}</h2>
       <p>{recipe.description}</p>
 
-      {/* EXTRA INFO only in full mode */}
+      {/* FULL DETAILS */}
       {full && (
         <>
-          <p>
-            <strong>Category:</strong> {recipe.category}
-          </p>
-          <p>
-            <strong>Tags:</strong> {recipe.tags.join(', ')}
-          </p>
+          <p><strong>Category:</strong> {recipe.category}</p>
+          <p><strong>Tags:</strong> {recipe.tags.join(', ')}</p>
 
-          {/* ALL INGREDIENTS */}
           <div className={styles.section}>
             <h3>Ingredients:</h3>
             {recipe.sections.map((section, i) => (
@@ -41,7 +85,6 @@ const RecipeCard = ({ recipe, full = false }) => {
             ))}
           </div>
 
-          {/* ALL INSTRUCTIONS */}
           <div className={styles.section}>
             <h3>Instructions:</h3>
             {recipe.sections.map((section, i) => (
@@ -56,7 +99,17 @@ const RecipeCard = ({ recipe, full = false }) => {
         </>
       )}
 
-      {/* VIEW BUTTON only if NOT full mode */}
+      {/* FAVORITE BUTTON */}
+      {user && (
+        <button
+          className={`${styles.favoriteButton} ${isFavorite ? styles.favActive : ''}`}
+          onClick={handleToggleFavorite}
+        >
+          ❤️
+        </button>
+      )}
+
+      {/* VIEW BUTTON (compact mode only) */}
       {!full && (
         <Button to={`/recipes/${recipe._id}`} variant="secondary">
           View Recipe

@@ -1,3 +1,4 @@
+/* Base card */
 .recipeCard {
   background-color: #fff;
   padding: 10px;
@@ -8,43 +9,85 @@
   transition: transform 0.2s;
   display: flex;
   flex-direction: column;
-  height: 100%; /* allows card to expand naturally in a grid */
+  position: relative;
 }
 
+/* Hover effect */
 .recipeCard:hover {
   transform: translateY(-3px);
 }
 
-.recipeCard h2 {
-  margin: 0 0 8px 0;
-  font-size: 1.2rem;
+/* Compact cards (homepage grid) */
+.compact {
+  height: 350px;              /* equal fixed height */
+  overflow: hidden;
 }
 
-.recipeCard h4 {
-  margin: 8px 0 4px 0;
-  font-size: 1rem;
+.compact h2 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.recipeCard p {
-  margin: 4px 0;
-  font-size: 0.85rem;
-  flex-grow: 0;
+.compact p {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+/* Full cards (detail page) */
+.full {
+  height: auto;               /* expand naturally */
+}
+
+.full h2,
+.full p {
+  white-space: normal;        /* show full text */
+  overflow: visible;
+  text-overflow: unset;
+}
+
+/* Image */
 .recipeImage {
   width: 100%;
-  height: 120px;
+  height: 150px;
   object-fit: cover;
   border-radius: 10px 10px 0 0;
   margin-bottom: 8px;
 }
 
-/* Button at bottom-left */
+.full .recipeImage {
+  height: auto; /* let it scale in full view */
+}
+
+/* View Button */
 .recipeCard .button {
-  margin-top: auto; /* push button to bottom */
-  align-self: flex-start; /* left-align */
+  margin-top: auto;
+  align-self: flex-start;
   padding: 4px 8px;
   font-size: 0.8rem;
+}
+
+/* Favorite Button */
+.favoriteButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: grey;
+  transition: transform 0.2s, color 0.2s;
+  z-index: 2;
+}
+
+.favoriteButton:hover {
+  color: red;
+  transform: scale(1.2);
+}
+
+.favActive {
+  color: red;
 }
 
 /* RESPONSIVE: adjust for small screens */
@@ -73,6 +116,7 @@
     padding: 3px 6px;
     font-size: 0.75rem;
   }
+
 }
 
 /* RESPONSIVE: very small mobile screens */
@@ -84,5 +128,11 @@
   .recipeCard .button {
     padding: 2px 5px;
     font-size: 0.7rem;
+  }
+
+  .favoriteButton {
+    font-size: 1.2rem;
+    top: 8px;
+    right: 8px;
   }
 }

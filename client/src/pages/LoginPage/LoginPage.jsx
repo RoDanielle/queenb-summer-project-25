@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./LoginPage.module.css";
+import { UserContext } from "../../context/UserContext"; // import context
 
-const LoginPage = ({ setUser }) => {
+const LoginPage = () => {
+  const { login } = useContext(UserContext); // use login from context
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -22,10 +24,11 @@ const LoginPage = ({ setUser }) => {
       }
 
       const data = await response.json();
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
-      setUser(data.user);
-      navigate("/");
+
+      // ✅ Update context and localStorage at the same time
+      login(data.user, data.token);
+
+      navigate("/"); // redirect to homepage
     } catch (err) {
       alert(err.message);
     }

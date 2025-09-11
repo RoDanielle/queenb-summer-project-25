@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
-  justify-items: center;
+  align-items: stretch;  /* 🔥 all cards stretch to equal height */
   margin-top: 20px;
 }
 

@@ -29,7 +29,7 @@ function App() {
         <Navbar user={user} setUser={setUser} />
         <main className={styles.main}>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home user={user} setUser={setUser} />} />
             <Route path="/new" element={<NewRecipe />} />
             <Route path="/recipes/:id" element={<RecipePage />} />
             <Route path="/login" element={<LoginPage setUser={setUser} />} />
