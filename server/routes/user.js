@@ -14,20 +14,20 @@ const adminOnly = require('../middleware/adminMiddleware');
 
 const router = express.Router();
 
-// Protect all routes: only authenticated admins can manage users
-router.use(verifyToken);
-router.use(adminOnly);
+// -------------------------
+// Admin-only routes
+// -------------------------
+router.use(verifyToken);        // All routes below require login
 
-// Read-only routes
-router.get('/', getAllUsers);          // Get all users
-router.get('/:id', getSingleUser);     // Get a single user
+router.get('/', adminOnly, getAllUsers);          // Get all users (admin only)
+router.get('/:id', adminOnly, getSingleUser);     // Get a single user (admin only)
+router.post('/', adminOnly, createUser);          // Create a new user (admin only)
+router.patch('/:id', adminOnly, updateUser);      // Update user info (admin only)
+router.delete('/:id', adminOnly, deleteUser);     // Delete user (admin only)
 
-// Read/write routes
-router.post('/', createUser);          // Create a new user (admin only)
-router.patch('/:id', updateUser);      // Update user info
-router.delete('/:id', deleteUser);     // Delete user
-
-// Routes for logged-in users (regular user access)
+// -------------------------
+// Routes for all logged-in users
+// -------------------------
 router.get('/me', verifyToken, getCurrentUser);
 router.patch('/favorites/:recipeId', verifyToken, toggleFavorite);
 

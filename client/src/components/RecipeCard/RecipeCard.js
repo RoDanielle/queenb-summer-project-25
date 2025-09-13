@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import Button from '../Button/Button';
-import styles from './RecipeCard.module.css';
+import React, { useState, useEffect, useContext } from "react";
+import Button from "../Button/Button";
+import styles from "./RecipeCard.module.css";
+import { UserContext } from "../../context/UserContext";
 
-const RecipeCard = ({ recipe, full = false, user, setUser }) => {
+const RecipeCard = ({ recipe, full = false }) => {
+  const { user, token, login } = useContext(UserContext);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [loadingFav, setLoadingFav] = useState(false);
 
   // Update heart color whenever user or recipe changes
   useEffect(() => {
@@ -16,62 +19,68 @@ const RecipeCard = ({ recipe, full = false, user, setUser }) => {
     }
   }, [user, recipe._id]);
 
-  // Toggle favorite status
   const handleToggleFavorite = async () => {
-    if (!user) {
-      alert('You must be logged in to favorite recipes.');
+    if (!user || !token) {
+      alert("You must be logged in to favorite recipes.");
       return;
     }
 
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) throw new Error('No token found');
+    // Optimistic UI: toggle heart immediately
+    const previousFavorite = isFavorite;
+    setIsFavorite(!isFavorite);
+    setLoadingFav(true);
 
+    //console.log("User:", user);
+    //console.log("Token:", token);
+
+    try {
       const res = await fetch(
         `http://localhost:5000/api/users/favorites/${recipe._id}`,
         {
-          method: 'PATCH',
+          method: "PATCH",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         }
       );
 
       if (!res.ok) {
-        if (res.status === 403)
-          throw new Error('Unauthorized. Token may be invalid.');
-        throw new Error('Failed to update favorites');
+        if (res.status === 403) throw new Error("Unauthorized. Token may be invalid.");
+        throw new Error("Failed to update favorites");
       }
 
       const data = await res.json();
       const favorites = Array.isArray(data.favorites) ? data.favorites : [];
 
-      // Update user state and heart color
-      setUser({ ...user, favorites });
+      // Update user context with new favorites
+      login({ ...user, favorites }, token);
+
+      // Ensure heart state matches actual favorites
       setIsFavorite(favorites.map(f => f.toString()).includes(recipe._id.toString()));
     } catch (err) {
       console.error(err);
       alert(err.message);
+      // Revert heart if server failed
+      setIsFavorite(previousFavorite);
+    } finally {
+      setLoadingFav(false);
     }
   };
 
   return (
     <div className={`${styles.recipeCard} ${full ? styles.full : styles.compact}`}>
-      {/* IMAGE */}
       {recipe.image && (
         <img src={recipe.image} alt={recipe.title} className={styles.recipeImage} />
       )}
 
-      {/* TITLE + DESCRIPTION */}
       <h2>{recipe.title}</h2>
       <p>{recipe.description}</p>
 
-      {/* FULL DETAILS */}
       {full && (
         <>
           <p><strong>Category:</strong> {recipe.category}</p>
-          <p><strong>Tags:</strong> {recipe.tags.join(', ')}</p>
+          <p><strong>Tags:</strong> {recipe.tags.join(", ")}</p>
 
           <div className={styles.section}>
             <h3>Ingredients:</h3>
@@ -99,17 +108,19 @@ const RecipeCard = ({ recipe, full = false, user, setUser }) => {
         </>
       )}
 
-      {/* FAVORITE BUTTON */}
+      {/* Favorite button */}
       {user && (
         <button
-          className={`${styles.favoriteButton} ${isFavorite ? styles.favActive : ''}`}
+          className={`${styles.favoriteButton} ${isFavorite ? styles.favActive : ""}`}
           onClick={handleToggleFavorite}
+          disabled={loadingFav}
+          title={isFavorite ? "Remove from favorites" : "Add to favorites"}
         >
-          ❤️
+          ♥
         </button>
       )}
 
-      {/* VIEW BUTTON (compact mode only) */}
+      {/* View button (compact mode only) */}
       {!full && (
         <Button to={`/recipes/${recipe._id}`} variant="secondary">
           View Recipe

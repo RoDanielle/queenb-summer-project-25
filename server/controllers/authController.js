@@ -23,9 +23,16 @@ const register = async (req, res, next) => {
     const user = await User.create({ name, email, password: hashedPassword });
 
     res.status(201).json({
-      token: generateToken(user),
-      user: { id: user._id, name: user.name, email: user.email, role: 'user' },
-    });
+    token: generateToken(user),
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: 'user',
+      favorites: user.favorites || [], // 👈 make sure favorites array is included
+  },
+});
+
   } catch (err) {
     next(err); // Pass error to errorMiddleware
   }
@@ -52,9 +59,15 @@ const login = async (req, res, next) => {
     }
 
     res.status(200).json({
-      token: generateToken(user),
-      user: { id: user._id, name: user.name, email: user.email, role: user.isManager ? 'admin' : 'user' },
-    });
+    token: generateToken(user),
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.isManager ? 'admin' : 'user',
+      favorites: user.favorites || [], // 👈 add favorites here too
+  },
+});
   } catch (err) {
     next(err);
   }
@@ -81,9 +94,16 @@ const createAdmin = async (req, res, next) => {
     const user = await User.create({ name, email, password: hashedPassword, isManager: true });
 
     res.status(201).json({
-      token: generateToken(user),
-      user: { id: user._id, name: user.name, email: user.email, role: 'admin' },
-    });
+  token: generateToken(user),
+  user: {
+    id: user._id,
+    name: user.name,
+    email: user.email,
+    role: 'admin',
+    favorites: user.favorites || [], // 👈 make sure favorites array is included
+  },
+});
+
   } catch (err) {
     next(err);
   }
