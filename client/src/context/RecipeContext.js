@@ -1,3 +1,4 @@
+// src/context/RecipeContext.js
 import React, { createContext, useState, useEffect } from 'react';
 import { getAllRecipes } from '../services/recipeService';
 
@@ -8,23 +9,32 @@ const RecipeProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // move fetch logic to a named function so we can call it later
+  const fetchRecipes = async () => {
+    try {
+      setLoading(true);
+      const data = await getAllRecipes();
+      setRecipes(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchRecipes = async () => {
-      try {
-        const data = await getAllRecipes(); // data will be an array
-        console.log(data); // should be an array
-        setRecipes(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchRecipes();
   }, []);
 
   return (
-    <RecipeContext.Provider value={{ recipes, loading, error }}>
+    <RecipeContext.Provider
+      value={{
+        recipes,
+        loading,
+        error,
+        refreshRecipes: fetchRecipes, // 👈 expose this to children
+      }}
+    >
       {children}
     </RecipeContext.Provider>
   );

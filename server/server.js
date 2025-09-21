@@ -40,6 +40,8 @@ app.use((req, res, next) => {
 app.use('/api/auth', authRoutes);      // Register, login, create-admin
 app.use('/api/users', userRoutes);     // Admin-only user management
 app.use('/api/recipes', recipeRoutes); // Recipe CRUD
+app.use("/uploads", express.static("uploads"));
+
 
 // Catch-all route for unknown endpoints
 app.use((req, res, next) => {

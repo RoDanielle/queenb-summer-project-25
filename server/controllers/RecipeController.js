@@ -31,17 +31,50 @@ const getSingleRecipe = async (req, res, next) => {
   }
 };
 
-// Create a new recipe (admin only)
+// Create a new recipe 
+// controllers/RecipeController.js
 const createRecipe = async (req, res, next) => {
-  const { title, description, sections, category, tags } = req.body;
-
   try {
-    const recipe = await Recipe.create({ title, description, sections, category, tags });
+    const { title, description, category } = req.body;
+
+    // Parse sections (string -> JSON)
+    let sections = [];
+    if (req.body.sections) {
+      sections = JSON.parse(req.body.sections);
+    }
+
+    // Parse tags (string or array)
+    let tags = [];
+    if (req.body.tags) {
+      try {
+        tags = JSON.parse(req.body.tags); // if sent as JSON string
+      } catch {
+        tags = req.body.tags.split(",").map(tag => tag.trim()); // fallback
+      }
+    }
+
+    // Handle uploaded image
+    const image = req.file ? `/uploads/${req.file.filename}` : null;
+
+    const recipe = await Recipe.create({
+      title,
+      description,
+      sections,
+      category,
+      tags,
+      image,
+    });
+
     res.status(201).json({ recipe });
   } catch (err) {
+    console.error("Error creating recipe:", err); // ✅ log full error
     next(err);
   }
 };
+
+
+
+
 
 // Update a recipe by ID (admin only)
 const updateRecipe = async (req, res, next) => {

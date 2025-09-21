@@ -1,7 +1,72 @@
 .container {
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  background-color: #fff3f8;
-  border-radius: 10px;
+  font-family: Arial, sans-serif;
+}
+
+.form label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.form input,
+.form textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.form button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  margin: 5px 0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.form button:hover {
+  background-color: #45a049;
+}
+
+.section {
+  border: 1px solid #ddd;
+  padding: 12px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+/* The filling bar that grows with progress */
+.progressBar > div {
+  height: 100%;
+  background: linear-gradient(90deg, #ff8a00, #e52e71);
+  width: 0%;
+  transition: width 0.3s ease;
+  border-radius: 12px 0 0 12px;
+}
+
+/* Optional label showing percentage */
+.progressLabel {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  font-weight: bold;
+  line-height: 25px;
+  font-size: 14px;
+  pointer-events: none;
+}
+
+p {
+  font-size: 14px;
+  margin-top: 10px;
 }

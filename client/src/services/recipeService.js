@@ -21,4 +21,21 @@ export const getRecipesByTags = async (tags) => {
   return res.data.recipe;
 };
 
-// You can also add createRecipe, updateRecipe, etc.
+
+export const createRecipe = async (formData, onUploadProgress, token) => {
+  if (!token) throw new Error("No token found, user must be logged in");
+
+  const res = await api.post('/recipes', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      Authorization: `Bearer ${token}`  // 🔑 send JWT
+    },
+    onUploadProgress
+  });
+
+  return res.data.recipe;
+};
+
+
+
+// You can also add updateRecipe, etc.
