@@ -71,7 +71,17 @@ const RecipeCard = ({ recipe, full = false }) => {
   return (
     <div className={`${styles.recipeCard} ${full ? styles.full : styles.compact}`}>
       {recipe.image && (
-        <img src={recipe.image} alt={recipe.title} className={styles.recipeImage} />
+        <img
+          src={
+            recipe.image
+              ? recipe.image.startsWith("http")
+                ? recipe.image
+                : `http://localhost:5000/${recipe.image.replace(/^\/+/, "")}`
+              : "/default-image.jpg"
+          } 
+          alt={recipe.title}
+          className={styles.recipeImage}
+        />
       )}
 
       <h2>{recipe.title}</h2>
