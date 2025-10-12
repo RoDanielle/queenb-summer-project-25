@@ -45,6 +45,7 @@
 }
 
 /* The filling bar that grows with progress */
+/* NewRecipe.module.css */
 .progressBar {
   width: 100%;
   background-color: #e0e0e0;
@@ -57,9 +58,9 @@
 
 .progressBar div {
   height: 100%;
+  width: 0%; /* start at 0 */
   background: linear-gradient(90deg, #4caf50, #81c784);
-  width: 0%;
-  transition: width 0.3s ease; /* smooth animation on width change */
+  transition: width 0.1s linear; /* smooth width transition */
 }
 
 .progressLabel {

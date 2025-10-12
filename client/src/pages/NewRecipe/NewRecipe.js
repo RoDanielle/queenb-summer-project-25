@@ -57,11 +57,13 @@
     };
 
     // Submit handler
+// 1️⃣ Make sure to only start the progress bar if authorized
 const handleSubmit = async (e) => {
   e.preventDefault();
+
   if (!token) {
     setMessage("You must be logged in to create a recipe.");
-    return;
+    return; // stop here, no progress bar
   }
 
   setSubmitting(true);
@@ -76,52 +78,51 @@ const handleSubmit = async (e) => {
   if (image) formData.append("image", image);
 
   try {
-    const duration = 30000; // 30 seconds
-    const intervalTime = 100; // update every 0.1s
-    const increment = (intervalTime / duration) * 100;
-
-    // start animation
-    const animationPromise = new Promise((resolve) => {
-      const interval = setInterval(() => {
-        setProgress(prev => {
-          if (prev + increment >= 100) {
-            clearInterval(interval);
-            setProgress(100);
-            setTimeout(() => setProgress(0), 1500); // hide bar after 1.5s
-            resolve(); // resolve promise when bar is done
-            return 100;
-          }
-          return prev + increment;
-        });
-      }, intervalTime);
-    });
-
-    // start actual upload
+    // 1️⃣ Upload the recipe
     await createRecipe(formData, () => {}, token);
+
+    // 2️⃣ Start smooth 1-minute progress
+    const duration = 60000; // 1 minute
+    const startTime = Date.now();
+
+    const interval = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      const percent = Math.min((elapsed / duration) * 100, 100);
+      setProgress(percent);
+
+      if (percent >= 100) {
+        clearInterval(interval);
+        setTimeout(() => setProgress(0), 1500); // hide after 1.5s
+      }
+    }, 50); // update every 50ms
+
     setMessage("Uploading Recipe...");
 
-    // reset form
+    // 3️⃣ Reset form fields
     setTitle("");
     setSections([{ name: "", ingredients: [{ name: "", quantity: "" }], instructions: [""] }]);
     setCategory("");
     setTags("");
     setImage(null);
 
+    // 4️⃣ Refresh recipes in context
     refreshRecipes();
 
-    // wait for animation to finish before redirect
-    await animationPromise;
-    navigate("/");
+    // 5️⃣ Redirect after full progress + 1.5s
+    setTimeout(() => navigate("/"), duration + 1500);
 
   } catch (err) {
     console.error(err);
-    setMessage(err.response?.data?.message || "Failed to upload recipe.");
+    if (err.response?.status === 401 || err.response?.status === 403) {
+      setMessage("Unauthorized. Please log in.");
+    } else {
+      setMessage(err.response?.data?.message || "Failed to upload recipe.");
+    }
     setProgress(0);
   } finally {
     setSubmitting(false);
   }
 };
-
     return (
       <div className={styles.container}>
         <h1>Create a New Recipe</h1>
@@ -197,11 +198,11 @@ const handleSubmit = async (e) => {
           </button>
 
           {progress > 0 && (
-            <div className={styles.progressBar}>
-              <div style={{ width: `${progress}%` }} />
-              <span className={styles.progressLabel}>{Math.round(progress)}%</span>
-            </div>
-          )}
+          <div className={styles.progressBar}>
+            <div style={{ width: `${progress}%` }} />
+            <span className={styles.progressLabel}>{Math.round(progress)}%</span>
+          </div>
+)}
 
           {message && <p>{message}</p>}
         </form>
