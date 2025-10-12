@@ -79,3 +79,11 @@ p {
   font-size: 14px;
   margin-top: 10px;
 }
+
+.error {
+  color: red;
+  font-size: 12px;
+  display: block;
+  margin-top: 2px;
+}
+
