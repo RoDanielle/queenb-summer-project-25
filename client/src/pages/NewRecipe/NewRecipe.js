@@ -1,193 +1,212 @@
-import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import styles from "./NewRecipe.module.css";
-import { createRecipe } from "../../services/recipeService";
-import { UserContext } from "../../context/UserContext";
-import { RecipeContext } from "../../context/RecipeContext";
+  import React, { useState, useContext } from "react";
+  import { useNavigate } from "react-router-dom";
+  import styles from "./NewRecipe.module.css";
+  import { createRecipe } from "../../services/recipeService";
+  import { UserContext } from "../../context/UserContext";
+  import { RecipeContext } from "../../context/RecipeContext";
 
-function NewRecipe() {
-  const navigate = useNavigate();
-  const { token } = useContext(UserContext); // JWT token from login
-  const { refreshRecipes } = useContext(RecipeContext); // refresh recipes list
+  function NewRecipe() {
+    const navigate = useNavigate();
+    const { token } = useContext(UserContext);
+    const { refreshRecipes } = useContext(RecipeContext);
 
-  const [title, setTitle] = useState("");
-  const [sections, setSections] = useState([
-    { name: "", ingredients: [{ name: "", quantity: "" }], instructions: [""] }
-  ]);
-  const [category, setCategory] = useState("");
-  const [tags, setTags] = useState("");
-  const [image, setImage] = useState(null);
-  const [message, setMessage] = useState("");
-  const [progress, setProgress] = useState(0);
-  const [submitting, setSubmitting] = useState(false);
+    const [title, setTitle] = useState("");
+    const [sections, setSections] = useState([
+      { name: "", ingredients: [{ name: "", quantity: "" }], instructions: [""] }
+    ]);
+    const [category, setCategory] = useState("");
+    const [tags, setTags] = useState("");
+    const [image, setImage] = useState(null);
+    const [message, setMessage] = useState("");
+    const [progress, setProgress] = useState(0);
+    const [submitting, setSubmitting] = useState(false);
 
-  // Section handlers
-  const handleSectionChange = (index, field, value) => {
-    const newSections = [...sections];
-    newSections[index][field] = value;
-    setSections(newSections);
-  };
+    // Section handlers
+    const handleSectionChange = (index, field, value) => {
+      const newSections = [...sections];
+      newSections[index][field] = value;
+      setSections(newSections);
+    };
 
-  const handleIngredientChange = (secIndex, ingIndex, field, value) => {
-    const newSections = [...sections];
-    newSections[secIndex].ingredients[ingIndex][field] = value;
-    setSections(newSections);
-  };
+    const handleIngredientChange = (secIndex, ingIndex, field, value) => {
+      const newSections = [...sections];
+      newSections[secIndex].ingredients[ingIndex][field] = value;
+      setSections(newSections);
+    };
 
-  const handleInstructionChange = (secIndex, instrIndex, value) => {
-    const newSections = [...sections];
-    newSections[secIndex].instructions[instrIndex] = value;
-    setSections(newSections);
-  };
+    const handleInstructionChange = (secIndex, instrIndex, value) => {
+      const newSections = [...sections];
+      newSections[secIndex].instructions[instrIndex] = value;
+      setSections(newSections);
+    };
 
-  const addSection = () => {
-    setSections([...sections, { name: "", ingredients: [{ name: "", quantity: "" }], instructions: [""] }]);
-  };
+    const addSection = () => {
+      setSections([...sections, { name: "", ingredients: [{ name: "", quantity: "" }], instructions: [""] }]);
+    };
 
-  const addIngredient = (secIndex) => {
-    const newSections = [...sections];
-    newSections[secIndex].ingredients.push({ name: "", quantity: "" });
-    setSections(newSections);
-  };
+    const addIngredient = (secIndex) => {
+      const newSections = [...sections];
+      newSections[secIndex].ingredients.push({ name: "", quantity: "" });
+      setSections(newSections);
+    };
 
-  const addInstruction = (secIndex) => {
-    const newSections = [...sections];
-    newSections[secIndex].instructions.push("");
-    setSections(newSections);
-  };
+    const addInstruction = (secIndex) => {
+      const newSections = [...sections];
+      newSections[secIndex].instructions.push("");
+      setSections(newSections);
+    };
 
-  // Submit handler
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!token) {
-      setMessage("You must be logged in to create a recipe.");
-      return;
-    }
+    // Submit handler
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!token) {
+    setMessage("You must be logged in to create a recipe.");
+    return;
+  }
 
-    setSubmitting(true);
-    setMessage("");
-    const formData = new FormData();
-formData.append("title", title);
-formData.append("sections", JSON.stringify(sections)); // already correct
-formData.append("category", category);
-formData.append("tags", JSON.stringify(tags.split(",").map(tag => tag.trim()))); // <-- stringify array
-if (image) formData.append("image", image);
+  setSubmitting(true);
+  setMessage("");
+  setProgress(0);
 
+  const formData = new FormData();
+  formData.append("title", title);
+  formData.append("sections", JSON.stringify(sections));
+  formData.append("category", category);
+  formData.append("tags", JSON.stringify(tags.split(",").map(tag => tag.trim())));
+  if (image) formData.append("image", image);
 
-    try {
-      await createRecipe(formData, (progressEvent) => {
-        const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-        setProgress(percent);
-      }, token);
+  try {
+    const duration = 30000; // 30 seconds
+    const intervalTime = 100; // update every 0.1s
+    const increment = (intervalTime / duration) * 100;
 
-      setMessage("Recipe uploaded successfully!");
-      // Reset form
-      setTitle("");
-      setSections([{ name: "", ingredients: [{ name: "", quantity: "" }], instructions: [""] }]);
-      setCategory("");
-      setTags("");
-      setImage(null);
-      setProgress(0);
+    // start animation
+    const animationPromise = new Promise((resolve) => {
+      const interval = setInterval(() => {
+        setProgress(prev => {
+          if (prev + increment >= 100) {
+            clearInterval(interval);
+            setProgress(100);
+            setTimeout(() => setProgress(0), 1500); // hide bar after 1.5s
+            resolve(); // resolve promise when bar is done
+            return 100;
+          }
+          return prev + increment;
+        });
+      }, intervalTime);
+    });
 
-      // Refresh recipes in context
-      refreshRecipes();
+    // start actual upload
+    await createRecipe(formData, () => {}, token);
+    setMessage("Uploading Recipe...");
 
-      // Optionally redirect
-      navigate("/"); 
-    } catch (err) {
-      console.error(err);
-      setMessage(err.response?.data?.message || "Failed to upload recipe.");
-      setProgress(0);
-    } finally {
-      setSubmitting(false);
-    }
-  };
+    // reset form
+    setTitle("");
+    setSections([{ name: "", ingredients: [{ name: "", quantity: "" }], instructions: [""] }]);
+    setCategory("");
+    setTags("");
+    setImage(null);
 
-  return (
-    <div className={styles.container}>
-      <h1>Create a New Recipe</h1>
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <label>
-          Title:
-          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
-        </label>
+    refreshRecipes();
 
-        <label>
-          Category:
-          <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} />
-        </label>
+    // wait for animation to finish before redirect
+    await animationPromise;
+    navigate("/");
 
-        <label>
-          Tags (comma separated):
-          <input type="text" value={tags} onChange={(e) => setTags(e.target.value)} />
-        </label>
+  } catch (err) {
+    console.error(err);
+    setMessage(err.response?.data?.message || "Failed to upload recipe.");
+    setProgress(0);
+  } finally {
+    setSubmitting(false);
+  }
+};
 
-        <label>
-          Image:
-          <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} />
-        </label>
+    return (
+      <div className={styles.container}>
+        <h1>Create a New Recipe</h1>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <label>
+            Title:
+            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
+          </label>
 
-        {sections.map((section, secIndex) => (
-          <div key={secIndex} className={styles.section}>
-            <h3>Section {secIndex + 1}</h3>
-            <input
-              type="text"
-              placeholder="Section Name"
-              value={section.name}
-              onChange={(e) => handleSectionChange(secIndex, "name", e.target.value)}
-              required
-            />
+          <label>
+            Category:
+            <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} />
+          </label>
 
-            <h4>Ingredients:</h4>
-            {section.ingredients.map((ing, ingIndex) => (
-              <div key={ingIndex}>
-                <input
-                  type="text"
-                  placeholder="Name"
-                  value={ing.name}
-                  onChange={(e) => handleIngredientChange(secIndex, ingIndex, "name", e.target.value)}
-                  required
-                />
-                <input
-                  type="text"
-                  placeholder="Quantity"
-                  value={ing.quantity}
-                  onChange={(e) => handleIngredientChange(secIndex, ingIndex, "quantity", e.target.value)}
-                  required
-                />
-              </div>
-            ))}
-            <button type="button" onClick={() => addIngredient(secIndex)}>Add Ingredient</button>
+          <label>
+            Tags (comma separated):
+            <input type="text" value={tags} onChange={(e) => setTags(e.target.value)} />
+          </label>
 
-            <h4>Instructions:</h4>
-            {section.instructions.map((instr, instrIndex) => (
-              <textarea
-                key={instrIndex}
-                value={instr}
-                onChange={(e) => handleInstructionChange(secIndex, instrIndex, e.target.value)}
+          <label>
+            Image:
+            <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} />
+          </label>
+
+          {sections.map((section, secIndex) => (
+            <div key={secIndex} className={styles.section}>
+              <h3>Section {secIndex + 1}</h3>
+              <input
+                type="text"
+                placeholder="Section Name"
+                value={section.name}
+                onChange={(e) => handleSectionChange(secIndex, "name", e.target.value)}
                 required
               />
-            ))}
-            <button type="button" onClick={() => addInstruction(secIndex)}>Add Instruction</button>
-          </div>
-        ))}
 
-        <button type="button" onClick={addSection}>Add Section</button>
-        <button type="submit" disabled={submitting}>
-          {submitting ? "Uploading..." : "Submit Recipe"}
-        </button>
+              <h4>Ingredients:</h4>
+              {section.ingredients.map((ing, ingIndex) => (
+                <div key={ingIndex}>
+                  <input
+                    type="text"
+                    placeholder="Name"
+                    value={ing.name}
+                    onChange={(e) => handleIngredientChange(secIndex, ingIndex, "name", e.target.value)}
+                    required
+                  />
+                  <input
+                    type="text"
+                    placeholder="Quantity"
+                    value={ing.quantity}
+                    onChange={(e) => handleIngredientChange(secIndex, ingIndex, "quantity", e.target.value)}
+                    required
+                  />
+                </div>
+              ))}
+              <button type="button" onClick={() => addIngredient(secIndex)}>Add Ingredient</button>
 
-        {progress > 0 && (
-          <div className={styles.progressBar}>
-            <div style={{ width: `${progress}%` }} />
-            <span className={styles.progressLabel}>{progress}%</span>
-          </div>
-        )}
+              <h4>Instructions:</h4>
+              {section.instructions.map((instr, instrIndex) => (
+                <textarea
+                  key={instrIndex}
+                  value={instr}
+                  onChange={(e) => handleInstructionChange(secIndex, instrIndex, e.target.value)}
+                  required
+                />
+              ))}
+              <button type="button" onClick={() => addInstruction(secIndex)}>Add Instruction</button>
+            </div>
+          ))}
 
-        {message && <p>{message}</p>}
-      </form>
-    </div>
-  );
-}
+          <button type="button" onClick={addSection}>Add Section</button>
+          <button type="submit" disabled={submitting}>
+            {submitting ? "Uploading..." : "Submit Recipe"}
+          </button>
 
-export default NewRecipe;
+          {progress > 0 && (
+            <div className={styles.progressBar}>
+              <div style={{ width: `${progress}%` }} />
+              <span className={styles.progressLabel}>{Math.round(progress)}%</span>
+            </div>
+          )}
+
+          {message && <p>{message}</p>}
+        </form>
+      </div>
+    );
+  }
+
+  export default NewRecipe;

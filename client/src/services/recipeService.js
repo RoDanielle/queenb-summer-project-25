@@ -30,7 +30,7 @@ export const createRecipe = async (formData, onUploadProgress, token) => {
       'Content-Type': 'multipart/form-data',
       Authorization: `Bearer ${token}`  // 🔑 send JWT
     },
-    onUploadProgress
+    onUploadProgress // a built-in Axios callback that reports progress events while the upload happens
   });
 
   return res.data.recipe;

@@ -45,25 +45,33 @@
 }
 
 /* The filling bar that grows with progress */
-.progressBar > div {
-  height: 100%;
-  background: linear-gradient(90deg, #ff8a00, #e52e71);
-  width: 0%;
-  transition: width 0.3s ease;
-  border-radius: 12px 0 0 12px;
+.progressBar {
+  width: 100%;
+  background-color: #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  height: 20px;
+  margin-top: 10px;
+  position: relative;
 }
 
-/* Optional label showing percentage */
+.progressBar div {
+  height: 100%;
+  background: linear-gradient(90deg, #4caf50, #81c784);
+  width: 0%;
+  transition: width 0.3s ease; /* smooth animation on width change */
+}
+
 .progressLabel {
   position: absolute;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  color: #fff;
+  font-size: 12px;
+  color: white;
   font-weight: bold;
-  line-height: 25px;
-  font-size: 14px;
-  pointer-events: none;
+  line-height: 20px;
+  text-shadow: 0 0 3px rgba(0,0,0,0.6);
 }
 
 p {
