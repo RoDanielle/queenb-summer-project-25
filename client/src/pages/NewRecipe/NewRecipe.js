@@ -4,6 +4,7 @@ import styles from "./NewRecipe.module.css";
 import { createRecipe } from "../../services/recipeService";
 import { UserContext } from "../../context/UserContext";
 import { RecipeContext } from "../../context/RecipeContext";
+import categories from "../../data/categories";
 
 function NewRecipe() {
   const navigate = useNavigate();
@@ -169,31 +170,15 @@ const handleSubmit = async (e) => {
         </label>
 
         <label>
-  Category:
-  <select
-    value={category}
-    onChange={(e) => setCategory(e.target.value)}
-  >
-    <option value="">Select a category</option>
-    {[
-      "Breakfast",
-      "Lunch",
-      "Dinner",
-      "Main",
-      "Dessert",
-      "Snack",
-      "Beverage",
-      "Vegan",
-      "Vegetarian",
-      "Gluten-Free",
-      "Other"
-    ].map((cat) => (
-      <option key={cat} value={cat}>{cat}</option>
-    ))}
-  </select>
-  {errors.category && <span className={styles.error}>{errors.category}</span>}
-</label>
-
+          Category:
+          <select value={category} onChange={(e) => setCategory(e.target.value)}>
+            <option value="">Select a category</option>
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </select>
+          {errors.category && <span className={styles.error}>{errors.category}</span>}
+        </label>
 
         <label>
           Tags (comma separated):
