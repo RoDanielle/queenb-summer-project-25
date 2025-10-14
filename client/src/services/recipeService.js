@@ -1,9 +1,9 @@
 import api from './api'; // your axios instance
 
-export const getAllRecipes = async () => {
-  const res = await api.get('/recipes');
-  //console.log(res.data); 
-  return res.data.recipes; // access the array inside the object
+export const getAllRecipes = async (params = {}) => {
+  // params = { category, tags }
+  const res = await api.get("/recipes", { params });
+  return res.data.recipes;
 };
 
 export const getRecipeById = async (id) => {

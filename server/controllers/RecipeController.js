@@ -1,10 +1,23 @@
 const Recipe = require('../models/RecipeModel');
 const mongoose = require('mongoose');
 
-// Get all recipes (any authenticated user)
 const getAllRecipes = async (req, res, next) => {
   try {
-    const recipes = await Recipe.find();
+    const { category, tags } = req.query; // now expecting "tags" param
+    let filter = {};
+
+    if (category) {
+      filter.category = category;
+    }
+
+    if (tags) {
+      // Split comma-separated tags and trim
+      const tagsArray = tags.split(",").map(tag => tag.trim());
+      // $all ensures recipe contains all specified tags
+      filter.tags = { $all: tagsArray };
+    }
+
+    const recipes = await Recipe.find(filter).sort({ createdAt: -1 });
     res.status(200).json({ recipes });
   } catch (err) {
     next(err);
