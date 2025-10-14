@@ -169,10 +169,31 @@ const handleSubmit = async (e) => {
         </label>
 
         <label>
-          Category:
-          <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} />
-          {errors.category && <span className={styles.error}>{errors.category}</span>}
-        </label>
+  Category:
+  <select
+    value={category}
+    onChange={(e) => setCategory(e.target.value)}
+  >
+    <option value="">Select a category</option>
+    {[
+      "Breakfast",
+      "Lunch",
+      "Dinner",
+      "Main",
+      "Dessert",
+      "Snack",
+      "Beverage",
+      "Vegan",
+      "Vegetarian",
+      "Gluten-Free",
+      "Other"
+    ].map((cat) => (
+      <option key={cat} value={cat}>{cat}</option>
+    ))}
+  </select>
+  {errors.category && <span className={styles.error}>{errors.category}</span>}
+</label>
+
 
         <label>
           Tags (comma separated):
