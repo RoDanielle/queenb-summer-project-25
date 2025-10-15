@@ -1,106 +1,175 @@
+/* 🌸 Home container */
 .home {
   text-align: center;
-  padding: 20px;
+  padding: 24px;
 }
 
+/* ✨ Headline */
 .headline {
-  font-size: 2em;
-  margin-bottom: 20px;
-  color: #f0ab7b;
+  font-family: var(--font-headline);
+  font-size: 2.2rem;
+  color: var(--color-primary);
+  margin-bottom: 24px;
 }
 
+/* 💬 Message text */
 .message {
-  font-size: 1.2em;
+  font-size: 1.1rem;
+  color: var(--color-text);
   margin-top: 20px;
 }
 
+/* 🧩 Filters box */
 .filters {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: 16px;
+  margin: 24px auto;
+  padding: 20px;
+  max-width: 700px;
+  background-color: var(--color-bg);
+  border-radius: 16px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
   align-items: center;
 }
 
-/* Category select styling */
-.filters label select {
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  margin-left: 6px;
+/* 🥗 Category selector */
+.filters label {
+  font-weight: 500;
 }
 
-/* Tags filter container */
+.filters label select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  margin-left: 8px;
+  background-color: white;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.filters label select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 5px rgba(240, 171, 123, 0.5);
+}
+
+/* 🏷️ Tags filter area */
 .tagsFilter {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
   align-items: center;
   justify-content: center;
 }
 
-/* Tag input box */
+/* 🔤 Tag input box */
 .tagsFilter input {
-  padding: 6px 10px;
-  border-radius: 6px;
+  padding: 8px 12px;
+  border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 14px;
+  min-width: 180px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Add tag button */
+.tagsFilter input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+}
+
+/* ➕ Add tag button */
 .tagsFilter button {
-  padding: 6px 12px;
-  border-radius: 6px;
-  border: 1px solid #4caf50;
-  background-color: white;
-  color: #4caf50;
-  cursor: pointer;
+  border: 1px solid var(--color-accent);
+  background-color: var(--color-accent);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
   font-size: 14px;
+  cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .tagsFilter button:hover {
-  background-color: #4caf50;
-  color: white;
+  background-color: #43a047;
 }
 
-/* Selected tags container */
+/* 🧩 Selected tags list */
 .selectedTags {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 6px;
+  gap: 8px;
+  margin-top: 10px;
+  justify-content: center;
 }
 
-/* Individual selected tag buttons */
+/* 🔘 Tag chip buttons */
 .tagButton {
-  padding: 6px 12px;
-  border: 1px solid #4caf50;
+  padding: 8px 14px;
+  border: 1px solid var(--color-accent);
   border-radius: 20px;
   background-color: white;
-  color: #4caf50;
+  color: var(--color-accent);
   cursor: pointer;
   font-size: 14px;
   transition: all 0.2s ease;
 }
 
-.activeTag {
-  background-color: #4caf50;
-  color: white;
-  border-color: #4caf50;
+.tagButton:hover {
+  background-color: #e8f5e9;
 }
 
-.resetButton {
-  padding: 6px 12px;
-  background-color: #f44336;
+.activeTag {
+  background-color: var(--color-accent);
   color: white;
+  border-color: var(--color-accent);
+}
+
+/* 🔍 Search button */
+.filters button[type="button"] {
   border: none;
-  border-radius: 6px;
+  background-color: var(--color-primary);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(240, 171, 123, 0.3);
+}
+
+.filters button[type="button"]:hover {
+  background-color: #ec9a65;
+  transform: scale(1.02);
+}
+
+/* 🔁 Reset button */
+.resetButton {
+  background-color: #f44336;
 }
 
 .resetButton:hover {
   background-color: #d32f2f;
+}
+
+/* 📱 Responsive tweaks */
+@media (max-width: 600px) {
+  .filters {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .tagsFilter input {
+    min-width: 120px;
+  }
+
+  .filters label select {
+    font-size: 14px;
+  }
+
+  .headline {
+    font-size: 1.8rem;
+  }
 }

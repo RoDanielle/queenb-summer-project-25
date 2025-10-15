@@ -6,26 +6,26 @@
   height: 50px;
   display: flex;
   align-items: center;
-  justify-content: space-between; /* space between left, center, right */
+  justify-content: space-between;
   padding: 0 20px;
   background-color: #c4c4c4;
   color: white;
   z-index: 1000;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  box-sizing: border-box;
+  font-family: var(--font-body); /* use global font */
 }
 
 .logo {
   height: 50px;
-  flex-shrink: 0; /* prevent logo from shrinking */
+  flex-shrink: 0;
 }
 
 .centerNav {
   display: flex;
   justify-content: center;
   gap: 25px;
-  flex-shrink: 1; /* allow it to shrink if needed */
-  overflow: hidden; /* prevent overflowing links */
+  flex-shrink: 1;
+  overflow: hidden;
 }
 
 .navLink {
@@ -34,6 +34,7 @@
   font-size: 1rem;
   transition: color 0.2s ease-in-out;
   white-space: nowrap;
+  font-family: var(--font-body);
 }
 
 .navLink:hover {
@@ -44,34 +45,19 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  flex-shrink: 0; /* never shrink */
-  white-space: nowrap; /* prevent text wrapping */
-}
-
-.navButton {
-  background-color: #d4ab07;
-  color: #fff;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  text-decoration: none;
-  transition: background-color 0.2s ease-in-out;
-}
-
-.navButton:hover {
-  background-color: #b68e05;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .navUser {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: white;
+  font-family: var(--font-body);
 }
 
 .userContainer {
   display: flex;
   align-items: center;
   gap: 10px;
-  white-space: nowrap; /* prevents wrapping */
+  white-space: nowrap;
 }

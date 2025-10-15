@@ -5,12 +5,12 @@
 .main {
   padding: 20px;
   background-color: #f7e5f0;
-  min-height: 100vh; /* better than height: 100vh so footer works properly */
+  min-height: 100vh;
 }
 
 .footer {
-  padding: 0.1px 0;           /* thinner vertical padding */
-  font-size: 0.7rem;        /* optional: smaller text */
+  padding: 4px 0;
+  font-size: 0.75rem;
   background-color: #c4c4c4;
   color: white;
   position: fixed;

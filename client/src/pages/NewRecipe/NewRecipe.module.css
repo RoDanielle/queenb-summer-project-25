@@ -1,66 +1,87 @@
+/* 🌸 Main container */
 .container {
   max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: var(--font-body);
+  color: var(--color-text);
 }
 
+/* 🧾 Section block */
+.section {
+  border: 1px solid #eee;
+  background-color: #fff8f2;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-radius: 12px;
+}
+
+/* 🏷️ Labels */
 .form label {
   display: block;
-  margin-bottom: 10px;
-  font-weight: bold;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #333;
 }
 
+/* ✏️ Inputs and textareas */
 .form input,
 .form textarea {
   width: 100%;
-  padding: 8px;
+  padding: 10px 12px;
   margin-top: 4px;
-  margin-bottom: 12px;
+  margin-bottom: 1rem;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+.form input:focus,
+.form textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 5px rgba(240, 171, 123, 0.4);
+}
+
+/* 🚀 Buttons */
 .form button {
-  background-color: #4caf50;
+  background-color: var(--color-primary);
   color: white;
   border: none;
-  padding: 10px 16px;
-  margin: 5px 0;
-  border-radius: 6px;
+  padding: 10px 18px;
+  margin-top: 10px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .form button:hover {
-  background-color: #45a049;
+  background-color: var(--color-primary-dark);
+  transform: translateY(-2px);
 }
 
-.section {
-  border: 1px solid #ddd;
-  padding: 12px;
-  margin-bottom: 20px;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-}
-
-/* The filling bar that grows with progress */
-/* NewRecipe.module.css */
+/* 📊 Progress bar */
 .progressBar {
   width: 100%;
   background-color: #e0e0e0;
   border-radius: 8px;
   overflow: hidden;
   height: 20px;
-  margin-top: 10px;
+  margin-top: 1rem;
   position: relative;
 }
 
 .progressBar div {
   height: 100%;
-  width: 0%; /* start at 0 */
-  background: linear-gradient(90deg, #4caf50, #81c784);
-  transition: width 0.1s linear; /* smooth width transition */
+  width: 0%;
+  background: linear-gradient(90deg, var(--color-primary), #f8c9a4);
+  transition: width 0.2s linear;
 }
 
 .progressLabel {
@@ -72,18 +93,18 @@
   color: white;
   font-weight: bold;
   line-height: 20px;
-  text-shadow: 0 0 3px rgba(0,0,0,0.6);
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
 }
 
+/* 🧾 Paragraphs and errors */
 p {
-  font-size: 14px;
-  margin-top: 10px;
+  font-size: 0.95rem;
+  margin-top: 0.75rem;
+  line-height: 1.5;
 }
 
 .error {
   color: red;
-  font-size: 12px;
-  display: block;
-  margin-top: 2px;
+  font-size: 0.9rem;
+  margin-top: 4px;
 }
-

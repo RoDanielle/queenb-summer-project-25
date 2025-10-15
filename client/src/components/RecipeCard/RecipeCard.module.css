@@ -10,6 +10,8 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  font-family: var(--font-body); /* consistent font */
+  color: #333; /* same text color as other pages */
 }
 
 /* Hover effect */
@@ -19,7 +21,7 @@
 
 /* Compact cards (homepage grid) */
 .compact {
-  height: 350px;              /* equal fixed height */
+  height: 350px;
   overflow: hidden;
 }
 
@@ -27,23 +29,26 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 1.2rem;
 }
 
 .compact p {
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 0.9rem;
 }
 
 /* Full cards (detail page) */
 .full {
-  height: auto;               /* expand naturally */
+  height: auto;
 }
 
 .full h2,
 .full p {
-  white-space: normal;        /* show full text */
+  white-space: normal;
   overflow: visible;
   text-overflow: unset;
+  font-size: 1.5rem; /* slightly larger for detail view */
 }
 
 /* Image */
@@ -56,15 +61,16 @@
 }
 
 .full .recipeImage {
-  height: auto; /* let it scale in full view */
+  height: auto;
 }
 
-/* View Button */
+/* Buttons inside cards */
 .recipeCard .button {
   margin-top: auto;
   align-self: flex-start;
-  padding: 4px 8px;
-  font-size: 0.8rem;
+  padding: 6px 12px; /* match global buttons */
+  font-size: 0.9rem;
+  font-family: var(--font-body);
 }
 
 /* Favorite Button */
@@ -90,7 +96,7 @@
   color: red;
 }
 
-/* RESPONSIVE: adjust for small screens */
+/* Responsive adjustments */
 @media (max-width: 600px) {
   .recipeCard {
     padding: 8px;
@@ -105,7 +111,7 @@
   }
 
   .recipeCard p {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
   }
 
   .recipeImage {
@@ -113,21 +119,19 @@
   }
 
   .recipeCard .button {
-    padding: 3px 6px;
-    font-size: 0.75rem;
+    padding: 5px 10px;
+    font-size: 0.8rem;
   }
-
 }
 
-/* RESPONSIVE: very small mobile screens */
 @media (max-width: 400px) {
   .recipeCard {
     margin: 5px;
   }
 
   .recipeCard .button {
-    padding: 2px 5px;
-    font-size: 0.7rem;
+    padding: 4px 8px;
+    font-size: 0.75rem;
   }
 
   .favoriteButton {

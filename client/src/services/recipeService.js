@@ -11,12 +11,12 @@ export const getRecipeById = async (id) => {
   return res.data.recipe; 
 };
 
-export const getRecipesByCategory = async (category) => {
+export const getRecipesByCategory = async (category) => { // might delete that, not in use
   const res = await api.get('/recipes', { params: { category } });
   return res.data.recipe;
 };
 
-export const getRecipesByTags = async (tags) => {
+export const getRecipesByTags = async (tags) => { // might delete that, not in use
   const res = await api.get('/recipes', { params: { tags } });
   return res.data.recipe;
 };
