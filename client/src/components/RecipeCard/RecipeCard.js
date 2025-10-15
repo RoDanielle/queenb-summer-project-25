@@ -8,7 +8,6 @@ const RecipeCard = ({ recipe, full = false }) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [loadingFav, setLoadingFav] = useState(false);
 
-  // Update heart color whenever user or recipe changes
   useEffect(() => {
     if (user && Array.isArray(user.favorites)) {
       setIsFavorite(
@@ -25,13 +24,9 @@ const RecipeCard = ({ recipe, full = false }) => {
       return;
     }
 
-    // Optimistic UI: toggle heart immediately
     const previousFavorite = isFavorite;
     setIsFavorite(!isFavorite);
     setLoadingFav(true);
-
-    //console.log("User:", user);
-    //console.log("Token:", token);
 
     try {
       const res = await fetch(
@@ -52,16 +47,11 @@ const RecipeCard = ({ recipe, full = false }) => {
 
       const data = await res.json();
       const favorites = Array.isArray(data.favorites) ? data.favorites : [];
-
-      // Update user context with new favorites
       login({ ...user, favorites }, token);
-
-      // Ensure heart state matches actual favorites
       setIsFavorite(favorites.map(f => f.toString()).includes(recipe._id.toString()));
     } catch (err) {
       console.error(err);
       alert(err.message);
-      // Revert heart if server failed
       setIsFavorite(previousFavorite);
     } finally {
       setLoadingFav(false);
@@ -70,22 +60,21 @@ const RecipeCard = ({ recipe, full = false }) => {
 
   return (
     <div className={`${styles.recipeCard} ${full ? styles.full : styles.compact}`}>
-      {recipe.image && (
-        <img
-          src={
-            recipe.image
-              ? recipe.image.startsWith("http")
+      <div className={styles.cardHeader}>
+        {recipe.image && (
+          <img
+            src={
+              recipe.image.startsWith("http")
                 ? recipe.image
                 : `http://localhost:5000/${recipe.image.replace(/^\/+/, "")}`
-              : "/default-image.jpg"
-          } 
-          alt={recipe.title}
-          className={styles.recipeImage}
-        />
-      )}
-
-      <h2>{recipe.title}</h2>
-      <p>{recipe.description}</p>
+            }
+            alt={recipe.title}
+            className={styles.recipeImage}
+          />
+        )}
+        <h2>{recipe.title}</h2>
+        <p>{recipe.description}</p>
+      </div>
 
       {full && (
         <>
@@ -130,11 +119,13 @@ const RecipeCard = ({ recipe, full = false }) => {
         </button>
       )}
 
-      {/* View button (compact mode only) */}
+      {/* Footer button (compact mode only) */}
       {!full && (
-        <Button to={`/recipes/${recipe._id}`} variant="secondary">
-          View Recipe
-        </Button>
+        <div className={styles.cardFooter}>
+          <Button to={`/recipes/${recipe._id}`} variant="secondary">
+            View Recipe
+          </Button>
+        </div>
       )}
     </div>
   );

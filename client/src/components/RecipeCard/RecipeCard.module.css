@@ -10,8 +10,8 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  font-family: var(--font-body); /* consistent font */
-  color: #333; /* same text color as other pages */
+  font-family: var(--font-body);
+  color: #333;
 }
 
 /* Hover effect */
@@ -22,6 +22,9 @@
 /* Compact cards (homepage grid) */
 .compact {
   height: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* key: push button to bottom */
   overflow: hidden;
 }
 
@@ -41,6 +44,8 @@
 /* Full cards (detail page) */
 .full {
   height: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .full h2,
@@ -48,7 +53,15 @@
   white-space: normal;
   overflow: visible;
   text-overflow: unset;
-  font-size: 1.5rem; /* slightly larger for detail view */
+  font-size: 1.5rem;
+}
+
+/* 📝 Wrap long words to prevent overflow */
+.full p,
+.full .section p,
+.full .section h4 {
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 /* Image */
@@ -66,11 +79,21 @@
 
 /* Buttons inside cards */
 .recipeCard .button {
-  margin-top: auto;
-  align-self: flex-start;
-  padding: 6px 12px; /* match global buttons */
+  margin-top: 0; /* no need auto because we're using justify-content */
+  align-self: stretch; /* full width */
+  padding: 6px 12px;
   font-size: 0.9rem;
   font-family: var(--font-body);
+  border-radius: 8px;
+  text-align: center;
+  background-color: var(--color-primary);
+  color: white;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.recipeCard .button:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-2px);
 }
 
 /* Favorite Button */
