@@ -1,23 +1,25 @@
 import React, { useContext, useState, useEffect } from "react";
-import { RecipeContext } from "../../context/RecipeContext";
 import { UserContext } from "../../context/UserContext";
 import RecipeList from "../../components/RecipeList/RecipeList";
 import styles from "./Home.module.css";
-import categories from "../../data/categories"; // centralized categories list
+import categories from "../../data/categories";
 import { getAllRecipes } from "../../services/recipeService";
 
 const Home = () => {
   const { user } = useContext(UserContext);
-  const { refreshRecipes } = useContext(RecipeContext);
+
+  // Load initial filters from localStorage if present
+  const savedCategory = localStorage.getItem("homeCategory") || "";
+  const savedTags = JSON.parse(localStorage.getItem("homeTags") || "[]");
 
   const [recipes, setRecipes] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [tagInput, setTagInput] = useState(""); // input box for tags
-  const [selectedTags, setSelectedTags] = useState([]); // active tags filter
+  const [selectedCategory, setSelectedCategory] = useState(savedCategory);
+  const [tagInput, setTagInput] = useState("");
+  const [selectedTags, setSelectedTags] = useState(savedTags);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Fetch recipes with filters
+  // Fetch recipes based on given filters
   const fetchFilteredRecipes = async (category = selectedCategory, tags = selectedTags) => {
     setLoading(true);
     setError("");
@@ -40,38 +42,39 @@ const Home = () => {
     fetchFilteredRecipes();
   }, []);
 
-  // Handle category change
+  // Save filters to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("homeCategory", selectedCategory);
+    localStorage.setItem("homeTags", JSON.stringify(selectedTags));
+  }, [selectedCategory, selectedTags]);
+
   const handleCategoryChange = (e) => {
     const value = e.target.value;
     setSelectedCategory(value);
-    fetchFilteredRecipes(value, selectedTags); // immediately fetch
+    fetchFilteredRecipes(value, selectedTags);
   };
 
-  // Handle adding a tag to filter
   const handleAddTag = () => {
     const tag = tagInput.trim();
     if (tag && !selectedTags.includes(tag)) {
       const newTags = [...selectedTags, tag];
       setSelectedTags(newTags);
-      fetchFilteredRecipes(selectedCategory, newTags); // immediately fetch
+      fetchFilteredRecipes(selectedCategory, newTags);
     }
     setTagInput("");
   };
 
-  // Handle removing a tag from filter
   const handleRemoveTag = (tag) => {
     const newTags = selectedTags.filter(t => t !== tag);
     setSelectedTags(newTags);
-    fetchFilteredRecipes(selectedCategory, newTags); // immediately fetch
+    fetchFilteredRecipes(selectedCategory, newTags);
   };
 
-  // Handle clear filters
   const handleClear = () => {
-    const clearedCategory = "";
-    const clearedTags = [];
-    setSelectedCategory(clearedCategory);
-    setSelectedTags(clearedTags);
-    fetchFilteredRecipes(clearedCategory, clearedTags); // immediately fetch
+    setSelectedCategory("");
+    setSelectedTags([]);
+    setTagInput("");
+    fetchFilteredRecipes("", []);
   };
 
   return (
@@ -79,7 +82,6 @@ const Home = () => {
       <h1 className={styles.headline}>Let's get cooking</h1>
 
       <div className={styles.filters}>
-        {/* 🔹 Top row: category select, tag input, clear button */}
         <div className={styles.filtersTop}>
           <label>
             Category:
@@ -101,12 +103,15 @@ const Home = () => {
             />
           </div>
 
-          <button type="button" onClick={handleClear} className={styles.clearButton}>
+          <button
+            type="button"
+            onClick={handleClear}
+            className={styles.clearButton}
+          >
             Clear
           </button>
         </div>
 
-        {/* 🔹 Tags row below top row */}
         <div className={styles.selectedTags}>
           {selectedTags.map(tag => (
             <button
@@ -123,7 +128,9 @@ const Home = () => {
 
       {loading && <p className={styles.message}>Loading recipes...</p>}
       {error && <p className={styles.message}>{error}</p>}
-      {!loading && !error && <RecipeList recipes={recipes} full={false} user={user} />}
+      {!loading && !error && (
+        <RecipeList recipes={recipes} full={false} user={user} />
+      )}
     </div>
   );
 };
