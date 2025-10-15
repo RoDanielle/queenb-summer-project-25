@@ -1,75 +1,70 @@
-/* 🌸 Home container */
 .home {
   text-align: center;
   padding: 24px;
-}
-
-/* ✨ Headline */
-.headline {
-  font-family: var(--font-headline);
-  font-size: 2.2rem;
-  color: var(--color-primary);
-  margin-bottom: 24px;
-}
-
-/* 💬 Message text */
-.message {
-  font-size: 1.1rem;
-  color: var(--color-text);
-  margin-top: 20px;
+  padding-top: 70px; 
 }
 
 /* 🧩 Filters box */
 .filters {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  flex-direction: column; /* top row + tags below */
+  gap: 12px;
   margin: 24px auto;
   padding: 20px;
-  max-width: 700px;
+  max-width: 900px;
   background-color: var(--color-bg);
   border-radius: 16px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-  align-items: center;
 }
 
-/* 🥗 Category selector */
-.filters label {
+/* 🔹 Top row: category select, tag input, clear button */
+.filtersTop {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* Category select */
+.filtersTop label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-weight: 500;
 }
 
-.filters label select {
+.filtersTop select {
   padding: 8px 12px;
   border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 15px;
-  margin-left: 8px;
   background-color: white;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.filters label select:focus {
+.filtersTop select:focus {
   outline: none;
   border-color: var(--color-primary);
   box-shadow: 0 0 5px rgba(240, 171, 123, 0.5);
 }
 
-/* 🏷️ Tags filter area */
+/* Tag input wrapper */
 .tagsFilter {
+  flex: 1 1 250px;           /* grow to fill remaining space */
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
-  justify-content: center;
+  gap: 8px;
+  min-width: 250px;
 }
 
-/* 🔤 Tag input box */
 .tagsFilter input {
+  flex: 1 1 100%;            /* occupy all available space in wrapper */
+  min-width: 250px;
   padding: 8px 12px;
   border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 14px;
-  min-width: 180px;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -79,34 +74,36 @@
   box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
 }
 
-/* ➕ Add tag button */
-.tagsFilter button {
-  border: 1px solid var(--color-accent);
-  background-color: var(--color-accent);
+/* Clear button */
+.filtersTop .clearButton {
+  background-color: #f0ab7b; 
   color: white;
-  padding: 8px 16px;
+  border: none;
+  padding: 10px 20px;
   border-radius: 8px;
-  font-size: 14px;
   cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
   transition: all 0.2s ease;
 }
 
-.tagsFilter button:hover {
-  background-color: #43a047;
+.filtersTop .clearButton:hover {
+  background-color: #d32f2f;
+  transform: scale(1.02);
 }
 
-/* 🧩 Selected tags list */
+/* Tags row below top row */
 .selectedTags {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: wrap;       /* allow multiple lines */
   gap: 8px;
-  margin-top: 10px;
-  justify-content: center;
+  justify-content: flex-start;  /* align tags neatly on left */
+  max-width: 100%;       /* ensure container does not overflow */
 }
 
-/* 🔘 Tag chip buttons */
+/* Individual tag button */
 .tagButton {
-  padding: 8px 14px;
+  padding: 6px 12px;
   border: 1px solid var(--color-accent);
   border-radius: 20px;
   background-color: white;
@@ -114,6 +111,9 @@
   cursor: pointer;
   font-size: 14px;
   transition: all 0.2s ease;
+  white-space: normal;       /* allow text to wrap inside tag */
+  word-break: break-word;    /* break long words */
+  max-width: 100%;           /* prevent overflow */
 }
 
 .tagButton:hover {
@@ -126,50 +126,40 @@
   border-color: var(--color-accent);
 }
 
-/* 🔍 Search button */
-.filters button[type="button"] {
-  border: none;
-  background-color: var(--color-primary);
-  color: white;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 5px rgba(240, 171, 123, 0.3);
-}
+/* 📱 Responsive adjustments */
+@media (max-width: 768px) {
+  .filtersTop {
+    flex-direction: column;
+    gap: 8px;
+  }
 
-.filters button[type="button"]:hover {
-  background-color: #ec9a65;
-  transform: scale(1.02);
-}
-
-/* 🔁 Reset button */
-.resetButton {
-  background-color: #f44336;
-}
-
-.resetButton:hover {
-  background-color: #d32f2f;
-}
-
-/* 📱 Responsive tweaks */
-@media (max-width: 600px) {
-  .filters {
-    padding: 14px;
-    gap: 12px;
+  .tagsFilter {
+    min-width: 100%;
   }
 
   .tagsFilter input {
-    min-width: 120px;
+    min-width: 100%;
   }
 
-  .filters label select {
+  .filtersTop .clearButton {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .filters {
+    padding: 16px;
+  }
+  .tagsFilter input {
     font-size: 14px;
+    padding: 6px 10px;
   }
-
-  .headline {
-    font-size: 1.8rem;
+  .filtersTop select {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+  .filtersTop .clearButton {
+    font-size: 14px;
+    padding: 8px 12px;
   }
 }
