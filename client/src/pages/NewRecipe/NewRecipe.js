@@ -41,7 +41,7 @@ function NewRecipe() {
 
       section.instructions.forEach((instr, instrIndex) => {
         if (!instr.trim()) {
-          newErrors[`instruction${sIndex}-${instrIndex}`] = "Instruction is required";
+          newErrors[`instruction${sIndex}-${instrIndex}`] = "Instructions are required";
         }
       });
     });
