@@ -19,7 +19,7 @@ const Navbar = () => {
     <nav className={styles.navbar}>
       {/* Logo */}
       <Link to="/">
-        <img src="/project-logo.png" alt="Logo" className={styles.logo} />
+        <img src="/navbarlogo4.png" alt="Logo" className={styles.logo} />
       </Link>
 
       {/* Center nav */}

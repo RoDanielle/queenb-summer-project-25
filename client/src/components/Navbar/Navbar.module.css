@@ -12,20 +12,32 @@
   color: white;
   z-index: 1000;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  font-family: var(--font-body); /* use global font */
+  box-sizing: border-box;
+  position: relative; /* for absolute center positioning */
 }
+
+.centerNav {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 25px;
+  overflow: hidden;
+  flex-shrink: 0; /* prevent shrinking */
+}
+
+.rightNav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0; /* never shrink */
+  white-space: nowrap;
+}
+
 
 .logo {
   height: 50px;
   flex-shrink: 0;
-}
-
-.centerNav {
-  display: flex;
-  justify-content: center;
-  gap: 25px;
-  flex-shrink: 1;
-  overflow: hidden;
 }
 
 .navLink {
@@ -41,13 +53,6 @@
   color: #d4ab07;
 }
 
-.rightNav {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
-  white-space: nowrap;
-}
 
 .navUser {
   font-size: 0.95rem;
