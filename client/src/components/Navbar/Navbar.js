@@ -2,11 +2,11 @@ import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../Button/Button";
 import styles from "./Navbar.module.css";
-import { UserContext } from "../../context/UserContext"; // import the context
+import { UserContext } from "../../context/UserContext";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { user, setUser } = useContext(UserContext); // get user from context
+  const { user, setUser } = useContext(UserContext);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -25,9 +25,14 @@ const Navbar = () => {
       {/* Center nav */}
       <div className={styles.centerNav}>
         {user && (
-          <Button to="/new" variant="primary">
-            New Recipe
-          </Button>
+          <>
+            <Button to="/new" variant="primary">
+              New Recipe
+            </Button>
+            <Button to="/favorites" variant="primary">
+              ❤️ Favorites
+            </Button>
+          </>
         )}
       </div>
 

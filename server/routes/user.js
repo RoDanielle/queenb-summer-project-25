@@ -15,20 +15,23 @@ const adminOnly = require('../middleware/adminMiddleware');
 const router = express.Router();
 
 // -------------------------
-// Admin-only routes
+// Protected routes (all require login) - from this line forward, every route defined below requires a valid token.
 // -------------------------
-router.use(verifyToken);        // All routes below require login
-
-router.get('/', adminOnly, getAllUsers);          // Get all users (admin only)
-router.get('/:id', adminOnly, getSingleUser);     // Get a single user (admin only)
-router.post('/', adminOnly, createUser);          // Create a new user (admin only)
-router.patch('/:id', adminOnly, updateUser);      // Update user info (admin only)
-router.delete('/:id', adminOnly, deleteUser);     // Delete user (admin only)
+router.use(verifyToken);
 
 // -------------------------
 // Routes for all logged-in users
 // -------------------------
-router.get('/me', verifyToken, getCurrentUser);
-router.patch('/favorites/:recipeId', verifyToken, toggleFavorite);
+router.get('/me', getCurrentUser);  // Returns the currently logged-in user’s info (decoded from their JWT)
+router.patch('/favorites/:recipeId', toggleFavorite); // Lets the user add or remove a recipe from their favorites list
+
+// -------------------------
+// Admin-only routes
+// -------------------------
+router.get('/', adminOnly, getAllUsers); // list all users (admin only)
+router.get('/:id', adminOnly, getSingleUser); // view a single user (admin only)
+router.post('/', adminOnly, createUser); // create a new user (admin only)
+router.patch('/:id', adminOnly, updateUser); // update a single user (admin only)
+router.delete('/:id', adminOnly, deleteUser); // // delete a single user (admin only)
 
 module.exports = router;

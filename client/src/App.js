@@ -7,6 +7,7 @@ import RecipePage from './pages/RecipePage/RecipePage';
 import LoginPage from "./pages/LoginPage/LoginPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import Navbar from "./components/Navbar/Navbar";
+import FavoritesPage from "./pages/FavoritesPage/FavoritesPage";
 // styles
 import styles from "./styles/App.module.css";
 
@@ -34,6 +35,7 @@ function App() {
             <Route path="/recipes/:id" element={<RecipePage />} />
             <Route path="/login" element={<LoginPage setUser={setUser} />} />
             <Route path="/register" element={<RegisterPage setUser={setUser} />} />
+            <Route path="/favorites" element={<FavoritesPage />} />
           </Routes>
         </main>
         <footer className={styles.footer}>
