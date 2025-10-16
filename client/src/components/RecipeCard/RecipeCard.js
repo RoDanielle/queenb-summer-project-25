@@ -73,7 +73,7 @@ const RecipeCard = ({ recipe, full = false }) => {
           />
         )}
         <h2>{recipe.title}</h2>
-        <p>{recipe.description}</p>
+        <p>{recipe.description || "No description"}</p>
       </div>
 
       {full && (

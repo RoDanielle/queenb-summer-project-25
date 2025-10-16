@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../context/UserContext";
-import RecipeList from "../../components/RecipeList/RecipeList";
+import RecipeGridWrapper from "../../components/RecipeGridWrapper/RecipeGridWrapper";
 import styles from "./Home.module.css";
 import categories from "../../data/categories";
 import { getAllRecipes } from "../../services/recipeService";
@@ -19,7 +19,7 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Fetch recipes based on given filters
+  // Fetch recipes based on filters
   const fetchFilteredRecipes = async (category = selectedCategory, tags = selectedTags) => {
     setLoading(true);
     setError("");
@@ -37,12 +37,12 @@ const Home = () => {
     }
   };
 
-  // Initial fetch on mount
+  // Initial fetch
   useEffect(() => {
     fetchFilteredRecipes();
   }, []);
 
-  // Save filters to localStorage whenever they change
+  // Save filters to localStorage
   useEffect(() => {
     localStorage.setItem("homeCategory", selectedCategory);
     localStorage.setItem("homeTags", JSON.stringify(selectedTags));
@@ -81,6 +81,7 @@ const Home = () => {
     <div className={styles.home}>
       <h1 className={styles.headline}>Let's get cooking</h1>
 
+      {/* Filters section */}
       <div className={styles.filters}>
         <div className={styles.filtersTop}>
           <label>
@@ -126,11 +127,15 @@ const Home = () => {
         </div>
       </div>
 
-      {loading && <p className={styles.message}>Loading recipes...</p>}
-      {error && <p className={styles.message}>{error}</p>}
-      {!loading && !error && (
-        <RecipeList recipes={recipes} full={false} user={user} />
-      )}
+      {/* Recipe grid */}
+      <RecipeGridWrapper
+        title=""               // optional, Home already has a headline
+        recipes={recipes}
+        loading={loading}
+        user={user}            // passes user for heart toggle
+        full={false}           // compact view
+        noMessage={error || "No recipes found."}
+      />
     </div>
   );
 };

@@ -1,31 +1,16 @@
-.container {
-  padding: 80px 20px 20px 20px; /* top padding to avoid navbar overlap */
-  min-height: 100vh;
-  background-color: var(--color-bg);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
 
 h1 {
   margin-bottom: 20px;
   font-size: 2rem;
-  color: #333;
+  color: var(--color-primary);
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
-  width: 100%;
-  max-width: 1200px;
-}
-
-.noFavoritesMessage {
+.noFavoritesMessage,
+.noRecipes {
   font-size: 1.2rem;
   color: #555;
   text-align: center;
   width: 100%;
-  grid-column: 1 / -1;
   margin-top: 50px;
+  grid-column: 1 / -1;
 }
