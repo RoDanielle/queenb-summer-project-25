@@ -31,14 +31,19 @@ const FavoritesPage = () => {
     fetchFavorites();
   }, [token]);
 
+  const handleRemoveFavorite = (recipeId) => {
+    setFavorites((prev) => prev.filter(r => r._id !== recipeId));
+  };
+
   return (
     <RecipeGridWrapper
       title="Your Favorite Recipes"
       recipes={favorites}
       loading={loading}
-      user={user}    
-      full={false}   // always compact
+      user={user}
+      full={false}
       noMessage="You haven't favorited any recipes yet."
+      removeFavorite={handleRemoveFavorite} // 👈 pass callback
     />
   );
 };

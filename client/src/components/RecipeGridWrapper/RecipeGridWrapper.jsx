@@ -2,7 +2,7 @@ import React from "react";
 import RecipeCard from "../RecipeCard/RecipeCard";
 import styles from "./RecipeGridWrapper.module.css";
 
-const RecipeGridWrapper = ({ title, recipes, loading, user, setUser, full = false, noMessage }) => {
+const RecipeGridWrapper = ({ title, recipes, loading, user, setUser, full = false, noMessage, removeFavorite }) => {
   return (
     <div className={styles.wrapper}>
       {title && <h1 className={styles.title}>{title}</h1>}
@@ -16,14 +16,14 @@ const RecipeGridWrapper = ({ title, recipes, loading, user, setUser, full = fals
       ) : recipes && recipes.length > 0 ? (
         <div className={styles.grid}>
           {recipes.map((recipe) => (
-            <RecipeCard
-              key={recipe._id}
-              recipe={recipe}
-              full={full}
-              user={user}
-              setUser={setUser}
-            />
-          ))}
+  <RecipeCard
+    key={recipe._id}
+    recipe={recipe}
+    full={full}
+    user={user}
+    onRemoveFavorite={removeFavorite} // 👈 forward callback
+  />
+))}
         </div>
       ) : (
         <p className={styles.noMessage}>{noMessage || "No recipes found."}</p>

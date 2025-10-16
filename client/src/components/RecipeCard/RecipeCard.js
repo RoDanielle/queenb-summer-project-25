@@ -3,16 +3,14 @@ import Button from "../Button/Button";
 import styles from "./RecipeCard.module.css";
 import { UserContext } from "../../context/UserContext";
 
-const RecipeCard = ({ recipe, full = false }) => {
+const RecipeCard = ({ recipe, full = false, onRemoveFavorite }) => {
   const { user, token, login } = useContext(UserContext);
   const [isFavorite, setIsFavorite] = useState(false);
   const [loadingFav, setLoadingFav] = useState(false);
 
   useEffect(() => {
     if (user && Array.isArray(user.favorites)) {
-      setIsFavorite(
-        user.favorites.map(f => f.toString()).includes(recipe._id.toString())
-      );
+      setIsFavorite(user.favorites.map(f => f.toString()).includes(recipe._id.toString()));
     } else {
       setIsFavorite(false);
     }
@@ -29,16 +27,13 @@ const RecipeCard = ({ recipe, full = false }) => {
     setLoadingFav(true);
 
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/users/favorites/${recipe._id}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await fetch(`http://localhost:5000/api/users/favorites/${recipe._id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (!res.ok) {
         if (res.status === 403) throw new Error("Unauthorized. Token may be invalid.");
@@ -48,7 +43,14 @@ const RecipeCard = ({ recipe, full = false }) => {
       const data = await res.json();
       const favorites = Array.isArray(data.favorites) ? data.favorites : [];
       login({ ...user, favorites }, token);
-      setIsFavorite(favorites.map(f => f.toString()).includes(recipe._id.toString()));
+      const stillFavorite = favorites.map(f => f.toString()).includes(recipe._id.toString());
+      setIsFavorite(stillFavorite);
+
+      // 🔹 Notify parent if removed
+      if (!stillFavorite && onRemoveFavorite) {
+        onRemoveFavorite(recipe._id);
+      }
+
     } catch (err) {
       console.error(err);
       alert(err.message);
