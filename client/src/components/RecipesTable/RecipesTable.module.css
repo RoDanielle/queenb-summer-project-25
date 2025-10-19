@@ -1,0 +1,31 @@
+.tableWrapper {
+  margin: 20px;
+  overflow-x: auto;
+}
+
+.recipesTable {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+}
+
+.recipesTable th,
+.recipesTable td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+
+.recipesTable th {
+  background-color: #f4f4f4;
+}
+
+.recipesTable tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.recipesTable button {
+  margin-right: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}

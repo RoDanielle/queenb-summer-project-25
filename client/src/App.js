@@ -8,6 +8,10 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import Navbar from "./components/Navbar/Navbar";
 import FavoritesPage from "./pages/FavoritesPage/FavoritesPage";
+import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
+// routes
+import AuthRoute from "./routes/AuthRoute";
+import AdminRoute from "./routes/AdminRoute";
 // styles
 import styles from "./styles/App.module.css";
 
@@ -30,13 +34,26 @@ function App() {
         <Navbar user={user} setUser={setUser} />
         <main className={styles.main}>
           <Routes>
-            <Route path="/" element={<Home user={user} setUser={setUser} />} />
-            <Route path="/new" element={<NewRecipe />} />
-            <Route path="/recipes/:id" element={<RecipePage />} />
-            <Route path="/login" element={<LoginPage setUser={setUser} />} />
-            <Route path="/register" element={<RegisterPage setUser={setUser} />} />
-            <Route path="/favorites" element={<FavoritesPage />} />
-          </Routes>
+  <Route path="/" element={<Home user={user} setUser={setUser} />} />
+  <Route path="/new" element={
+    <AuthRoute>
+      <NewRecipe />
+    </AuthRoute>
+  } />
+  <Route path="/recipes/:id" element={<RecipePage />} />
+  <Route path="/login" element={<LoginPage setUser={setUser} />} />
+  <Route path="/register" element={<RegisterPage setUser={setUser} />} />
+  <Route path="/favorites" element={
+    <AuthRoute>
+      <FavoritesPage />
+    </AuthRoute>
+  } />
+  <Route path="/admin" element={
+    <AdminRoute>
+      <AdminDashboard />
+    </AdminRoute>
+  } />
+</Routes>
         </main>
         <footer className={styles.footer}>
           <p>&copy; 2025 My App</p>

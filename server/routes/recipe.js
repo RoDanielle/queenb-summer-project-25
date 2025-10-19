@@ -21,7 +21,7 @@ router.get('/:id', getSingleRecipe);
 router.post('/', verifyToken, upload.single('image'), createRecipe);
 
 // ADMIN ONLY: creating, updating, deleting recipes
-router.patch('/:id', verifyToken, upload.single('image'), updateRecipe);
+router.patch('/:id', verifyToken, adminOnly, upload.single('image'), updateRecipe);
 router.delete('/:id', verifyToken, adminOnly, deleteRecipe);
 
 module.exports = router;

@@ -1,0 +1,31 @@
+.tableWrapper {
+  margin: 20px;
+  overflow-x: auto;
+}
+
+.usersTable {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+}
+
+.usersTable th,
+.usersTable td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+
+.usersTable th {
+  background-color: #f4f4f4;
+}
+
+.usersTable tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.usersTable button {
+  margin-right: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}

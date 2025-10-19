@@ -26,12 +26,12 @@ const Navbar = () => {
       <div className={styles.centerNav}>
         {user && (
           <>
-            <Button to="/new" variant="primary">
-              New Recipe
-            </Button>
-            <Button to="/favorites" variant="primary">
-              ❤️ Favorites
-            </Button>
+            <Button to="/new" variant="primary">New Recipe</Button>
+            <Button to="/favorites" variant="primary">❤️ Favorites</Button>
+            {/* Only show Admin Dashboard for admins */}
+            {user.role === "admin" && (
+              <Button to="/admin" variant="secondary">Admin Dashboard</Button>
+            )}
           </>
         )}
       </div>
@@ -40,19 +40,13 @@ const Navbar = () => {
       <div className={styles.rightNav}>
         {!user ? (
           <>
-            <Button to="/login" variant="primary">
-              Login
-            </Button>
-            <Button to="/register" variant="secondary">
-              Register
-            </Button>
+            <Button to="/login" variant="primary">Login</Button>
+            <Button to="/register" variant="secondary">Register</Button>
           </>
         ) : (
           <div className={styles.userContainer}>
             <span className={styles.navUser}>Hello, {user.name}</span>
-            <Button onClick={handleLogout} variant="danger">
-              Logout
-            </Button>
+            <Button onClick={handleLogout} variant="danger">Logout</Button>
           </div>
         )}
       </div>
