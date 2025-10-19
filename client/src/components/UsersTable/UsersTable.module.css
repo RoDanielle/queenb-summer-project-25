@@ -1,31 +1,69 @@
 .tableWrapper {
-  margin: 20px;
   overflow-x: auto;
 }
 
 .usersTable {
   width: 100%;
   border-collapse: collapse;
-  background-color: #fff;
+  margin-top: 10px;
 }
 
 .usersTable th,
 .usersTable td {
-  border: 1px solid #ccc;
   padding: 10px;
+  border-bottom: 1px solid #ddd;
   text-align: left;
 }
 
 .usersTable th {
   background-color: #f4f4f4;
+  font-weight: bold;
 }
 
-.usersTable tr:nth-child(even) {
-  background-color: #fafafa;
+.usersTable tr:hover {
+  background-color: #f9f9f9;
 }
 
-.usersTable button {
-  margin-right: 5px;
+.editButton {
+  background-color: #1890ff;
+  color: white;
+  border: none;
   padding: 5px 10px;
+  border-radius: 5px;
+  margin-right: 5px;
   cursor: pointer;
+}
+
+.saveButton {
+  background-color: #52c41a;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.cancelButton {
+  background-color: #faad14;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.deleteButton {
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+input[type="text"],
+input[type="email"] {
+  width: 90%;
+  padding: 5px;
 }

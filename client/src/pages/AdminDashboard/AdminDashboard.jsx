@@ -1,35 +1,34 @@
 import React, { useState } from "react";
-import RecipesTable from "../../components/RecipesTable/RecipesTable";
-import UsersTable from "../../components/UsersTable/UsersTable";
 import styles from "./AdminDashboard.module.css";
+import UsersTable from "../../components/UsersTable/UsersTable";
+import RecipesTable from "../../components/RecipesTable/RecipesTable";
 
 const AdminDashboard = () => {
-  const [activeTab, setActiveTab] = useState("recipes");
+  const [activeTab, setActiveTab] = useState("users");
 
   return (
     <div className={styles.dashboard}>
       <h1>Admin Dashboard</h1>
 
-      {/* Tabs */}
+      {/* Tab buttons */}
       <div className={styles.tabs}>
-        <button
-          className={activeTab === "recipes" ? styles.active : ""}
-          onClick={() => setActiveTab("recipes")}
-        >
-          Recipes
-        </button>
         <button
           className={activeTab === "users" ? styles.active : ""}
           onClick={() => setActiveTab("users")}
         >
           Users
         </button>
+        <button
+          className={activeTab === "recipes" ? styles.active : ""}
+          onClick={() => setActiveTab("recipes")}
+        >
+          Recipes
+        </button>
       </div>
 
-      {/* Content */}
       <div className={styles.tabContent}>
-        {activeTab === "recipes" && <RecipesTable />}
         {activeTab === "users" && <UsersTable />}
+        {activeTab === "recipes" && <RecipesTable />}
       </div>
     </div>
   );

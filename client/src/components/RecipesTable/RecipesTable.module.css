@@ -1,31 +1,79 @@
+/* src/components/RecipesTable/RecipesTable.module.css */
 .tableWrapper {
-  margin: 20px;
   overflow-x: auto;
+  margin-top: 1.5rem;
 }
 
 .recipesTable {
   width: 100%;
   border-collapse: collapse;
-  background-color: #fff;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
 }
 
 .recipesTable th,
 .recipesTable td {
-  border: 1px solid #ccc;
-  padding: 10px;
+  border-bottom: 1px solid #eee;
+  padding: 0.75rem 1rem;
   text-align: left;
+  vertical-align: top;
 }
 
 .recipesTable th {
-  background-color: #f4f4f4;
+  background-color: #f6f6f9;
+  font-weight: 600;
 }
 
-.recipesTable tr:nth-child(even) {
-  background-color: #fafafa;
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
 }
 
-.recipesTable button {
-  margin-right: 5px;
-  padding: 5px 10px;
+textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+button {
   cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  margin-right: 6px;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.editButton {
+  background-color: #007bff;
+  color: white;
+}
+
+.deleteButton {
+  background-color: #dc3545;
+  color: white;
+}
+
+.saveButton {
+  background-color: #28a745;
+  color: white;
+}
+
+.cancelButton {
+  background-color: #6c757d;
+  color: white;
+}
+
+.noData {
+  text-align: center;
+  padding: 1.5rem;
+  font-size: 1rem;
+  color: #888;
 }

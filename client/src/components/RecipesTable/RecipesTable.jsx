@@ -1,22 +1,27 @@
-import React, { useState, useEffect, useContext } from "react";
-import { UserContext } from "../../context/UserContext";
+// src/components/RecipesTable/RecipesTable.jsx
+import React, { useEffect, useState, useContext } from "react";
 import styles from "./RecipesTable.module.css";
+import { UserContext } from "../../context/UserContext";
+import categories from "../../data/categories";
+import RecipeEditModal from "../RecipeEditModal/RecipeEditModal";
 
 const RecipesTable = () => {
   const { token } = useContext(UserContext);
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingRecipe, setEditingRecipe] = useState(null);
-  const [editData, setEditData] = useState({ title: "", category: "", description: "" });
 
   // Fetch all recipes
   const fetchRecipes = async () => {
+    if (!token) return;
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/recipes/");
+      const res = await fetch("http://localhost:5000/api/recipes", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (!res.ok) throw new Error("Failed to fetch recipes");
       const data = await res.json();
-      setRecipes(data.recipes);
+      setRecipes(data.recipes || []);
     } catch (err) {
       console.error(err);
     } finally {
@@ -26,125 +31,99 @@ const RecipesTable = () => {
 
   useEffect(() => {
     fetchRecipes();
-  }, []);
+  }, [token]);
 
-  // Delete a recipe
+  // Delete recipe
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this recipe?")) return;
-
     try {
       const res = await fetch(`http://localhost:5000/api/recipes/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error("Failed to delete recipe");
-      setRecipes(recipes.filter((r) => r._id !== id));
+      setRecipes((prev) => prev.filter((r) => r._id !== id));
     } catch (err) {
       console.error(err);
+      alert(err.message);
     }
   };
 
-  // Start editing a recipe
-  const startEdit = (recipe) => {
-    setEditingRecipe(recipe._id);
-    setEditData({
-      title: recipe.title,
-      description: recipe.description || "",
-      category: recipe.category || "",
-    });
-  };
-
-  // Cancel edit
-  const cancelEdit = () => setEditingRecipe(null);
-
-  // Save edit
-  const saveEdit = async () => {
+  // Save recipe after editing
+  const handleSave = async (updatedRecipe) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/recipes/${editingRecipe}`, {
+      const res = await fetch(`http://localhost:5000/api/recipes/${updatedRecipe._id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(editData),
+        body: JSON.stringify(updatedRecipe),
       });
-      if (!res.ok) throw new Error("Failed to update recipe");
-      const data = await res.json();
 
-      setRecipes(recipes.map((r) => (r._id === editingRecipe ? data.recipe : r)));
+      if (!res.ok) throw new Error("Failed to update recipe");
+
+      const data = await res.json();
+      setRecipes((prev) =>
+        prev.map((r) => (r._id === updatedRecipe._id ? data.recipe : r))
+      );
       setEditingRecipe(null);
     } catch (err) {
       console.error(err);
+      alert(err.message);
     }
   };
 
-  if (loading) return <p>Loading recipes...</p>;
-
   return (
     <div className={styles.tableWrapper}>
-      <h2>All Recipes</h2>
-      <table className={styles.recipesTable}>
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Category</th>
-            <th>Description</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {recipes.map((recipe) => (
-            <tr key={recipe._id}>
-              <td>
-                {editingRecipe === recipe._id ? (
-                  <input
-                    type="text"
-                    value={editData.title}
-                    onChange={(e) => setEditData({ ...editData, title: e.target.value })}
-                  />
-                ) : (
-                  recipe.title
-                )}
-              </td>
-              <td>
-                {editingRecipe === recipe._id ? (
-                  <input
-                    type="text"
-                    value={editData.category}
-                    onChange={(e) => setEditData({ ...editData, category: e.target.value })}
-                  />
-                ) : (
-                  recipe.category
-                )}
-              </td>
-              <td>
-                {editingRecipe === recipe._id ? (
-                  <input
-                    type="text"
-                    value={editData.description}
-                    onChange={(e) => setEditData({ ...editData, description: e.target.value })}
-                  />
-                ) : (
-                  recipe.description || "No description"
-                )}
-              </td>
-              <td>
-                {editingRecipe === recipe._id ? (
-                  <>
-                    <button onClick={saveEdit}>Save</button>
-                    <button onClick={cancelEdit}>Cancel</button>
-                  </>
-                ) : (
-                  <>
-                    <button onClick={() => startEdit(recipe)}>Edit</button>
-                    <button onClick={() => handleDelete(recipe._id)}>Delete</button>
-                  </>
-                )}
-              </td>
+      {loading ? (
+        <p>Loading recipes...</p>
+      ) : (
+        <table className={styles.recipesTable}>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Tags</th>
+              <th>Sections</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {recipes.map((recipe) => (
+              <tr key={recipe._id}>
+                <td>{recipe.title}</td>
+                <td>{recipe.category}</td>
+                <td>{(recipe.tags || []).join(", ")}</td>
+                <td>{(recipe.sections || []).length}</td>
+                <td>
+                  <button
+                    className={styles.editButton}
+                    onClick={() => setEditingRecipe(recipe)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className={styles.deleteButton}
+                    onClick={() => handleDelete(recipe._id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+
+      {editingRecipe && (
+        <RecipeEditModal
+          recipe={editingRecipe}
+          categories={categories}
+          onSave={handleSave}
+          onClose={() => setEditingRecipe(null)}
+        />
+      )}
     </div>
   );
 };
