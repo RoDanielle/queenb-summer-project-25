@@ -14,34 +14,42 @@ const RegisterPage = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
+  e.preventDefault();
 
-    if (password !== passwordConfirm) {
-      setError("Passwords do not match");
+  // Password validation
+  const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/; // min 8 chars, at least 1 letter, 1 number
+  if (!passwordPattern.test(password)) {
+    setError(
+      "Password must be at least 8 characters long and contain at least one letter and one number."
+    );
+    return;
+  }
+
+  if (password !== passwordConfirm) {
+    setError("Passwords do not match");
+    return;
+  }
+
+  try {
+    const response = await fetch("http://localhost:5000/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, password }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setError(data.message || "Registration failed");
       return;
     }
 
-    try {
-      const response = await fetch("http://localhost:5000/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.message || "Registration failed");
-        return;
-      }
-
-      login(data.user, data.token);
-      navigate("/");
-    } catch (err) {
-      setError("Something went wrong. Please try again.");
-    }
-  };
+    login(data.user, data.token);
+    navigate("/"); // redirect to homepage
+  } catch (err) {
+    setError("Something went wrong. Please try again.");
+  }
+};
 
   return (
     <div className={styles.registerContainer}>

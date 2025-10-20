@@ -72,6 +72,41 @@
   color: #444;
 }
 
+/* 🌟 Field Group */
+.fieldGroup {
+  display: flex;
+  flex-direction: column; /* label above input */
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+/* Label styling */
+.fieldGroup label {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: #333;
+}
+
+/* Inputs, textareas, selects */
+.fieldGroup input,
+.fieldGroup textarea,
+.fieldGroup select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.fieldGroup input:focus,
+.fieldGroup textarea:focus,
+.fieldGroup select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 6px rgba(240, 171, 123, 0.4);
+}
+
 /* 🚀 Buttons */
 .form button {
   border: none;
@@ -171,17 +206,18 @@ p,
 /* 🧩 Ingredient Row */
 .ingredientRow {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
   margin-bottom: 0.5rem;
 }
 
-.ingredientRow input {
-  flex: 1;
+.ingredientRow .fieldGroup {
+  flex: 1; /* Both name and quantity take equal width */
 }
 
 /* ✖ Small remove button for ingredients and sections */
 .removeSmallButton {
+  flex-shrink: 0;
   background-color: #ffe5e5;
   color: #c00;
   border: 1px solid #ffcccc;
