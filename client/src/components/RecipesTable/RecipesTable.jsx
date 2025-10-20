@@ -2,16 +2,15 @@
 import React, { useEffect, useState, useContext } from "react";
 import styles from "./RecipesTable.module.css";
 import { UserContext } from "../../context/UserContext";
-import categories from "../../data/categories";
-import RecipeEditModal from "../RecipeEditModal/RecipeEditModal";
+import RecipeEditModal from "../RecipeEditModal/RecipeEditModal"; // ✅ Import the new modal
 
 const RecipesTable = () => {
   const { token } = useContext(UserContext);
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [editingRecipe, setEditingRecipe] = useState(null);
+  const [selectedRecipe, setSelectedRecipe] = useState(null); // ✅ Modal control
 
-  // Fetch all recipes
+  // --- Fetch Recipes ---
   const fetchRecipes = async () => {
     if (!token) return;
     setLoading(true);
@@ -21,7 +20,7 @@ const RecipesTable = () => {
       });
       if (!res.ok) throw new Error("Failed to fetch recipes");
       const data = await res.json();
-      setRecipes(data.recipes || []);
+      setRecipes(data.recipes);
     } catch (err) {
       console.error(err);
     } finally {
@@ -33,7 +32,7 @@ const RecipesTable = () => {
     fetchRecipes();
   }, [token]);
 
-  // Delete recipe
+  // --- Delete Recipe ---
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this recipe?")) return;
     try {
@@ -42,42 +41,36 @@ const RecipesTable = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error("Failed to delete recipe");
-      setRecipes((prev) => prev.filter((r) => r._id !== id));
+      setRecipes(recipes.filter((r) => r._id !== id));
     } catch (err) {
       console.error(err);
       alert(err.message);
     }
   };
 
-  // Save recipe after editing
-  const handleSave = async (updatedRecipe) => {
-    try {
-      const res = await fetch(`http://localhost:5000/api/recipes/${updatedRecipe._id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(updatedRecipe),
-      });
+  // --- Edit Recipe (open modal) ---
+  const handleEdit = (recipe) => {
+    setSelectedRecipe(recipe); // ✅ Opens the modal
+  };
 
-      if (!res.ok) throw new Error("Failed to update recipe");
+  // --- Save after editing ---
+  const handleSave = (updatedRecipe) => {
+    setRecipes((prev) =>
+      prev.map((r) => (r._id === updatedRecipe._id ? updatedRecipe : r))
+    );
+  };
 
-      const data = await res.json();
-      setRecipes((prev) =>
-        prev.map((r) => (r._id === updatedRecipe._id ? data.recipe : r))
-      );
-      setEditingRecipe(null);
-    } catch (err) {
-      console.error(err);
-      alert(err.message);
-    }
+  // --- Close modal ---
+  const handleCloseModal = () => {
+    setSelectedRecipe(null);
   };
 
   return (
     <div className={styles.tableWrapper}>
       {loading ? (
         <p>Loading recipes...</p>
+      ) : recipes.length === 0 ? (
+        <p className={styles.noData}>No recipes available.</p>
       ) : (
         <table className={styles.recipesTable}>
           <thead>
@@ -85,7 +78,6 @@ const RecipesTable = () => {
               <th>Title</th>
               <th>Category</th>
               <th>Tags</th>
-              <th>Sections</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -95,11 +87,10 @@ const RecipesTable = () => {
                 <td>{recipe.title}</td>
                 <td>{recipe.category}</td>
                 <td>{(recipe.tags || []).join(", ")}</td>
-                <td>{(recipe.sections || []).length}</td>
                 <td>
                   <button
                     className={styles.editButton}
-                    onClick={() => setEditingRecipe(recipe)}
+                    onClick={() => handleEdit(recipe)}
                   >
                     Edit
                   </button>
@@ -116,12 +107,12 @@ const RecipesTable = () => {
         </table>
       )}
 
-      {editingRecipe && (
+      {/* ✅ Show modal when a recipe is selected */}
+      {selectedRecipe && (
         <RecipeEditModal
-          recipe={editingRecipe}
-          categories={categories}
+          recipe={selectedRecipe}
+          onClose={handleCloseModal}
           onSave={handleSave}
-          onClose={() => setEditingRecipe(null)}
         />
       )}
     </div>

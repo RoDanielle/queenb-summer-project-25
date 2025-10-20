@@ -79,21 +79,36 @@ const updateUser = async (req, res, next) => {
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     res.status(404);
-    return next(new Error('No such user'));
+    return next(new Error("No such user"));
   }
 
   try {
+    // 🔍 Check if email already exists (for another user)
+    if (email) {
+      const existingUser = await User.findOne({ email });
+      if (existingUser && existingUser._id.toString() !== id) {
+        return res.status(400).json({ message: "Email already in use" });
+      }
+    }
+
+    // 🔐 Prepare updated fields
     let updateData = { name, email, isManager, favorites };
 
     if (password) {
       updateData.password = await bcrypt.hash(password, 10);
     }
 
-    const user = await User.findByIdAndUpdate(id, updateData, { new: true });
+    // ✏️ Update user
+    const user = await User.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    });
+
     if (!user) {
       res.status(404);
-      throw new Error('User not found');
+      throw new Error("User not found");
     }
+
     res.status(200).json({ user });
   } catch (err) {
     next(err);
