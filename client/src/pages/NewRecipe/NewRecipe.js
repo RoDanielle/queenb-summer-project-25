@@ -137,7 +137,7 @@ function NewRecipe() {
       await createRecipe(formData, () => {}, token);
       setMessage("Uploading Recipe...");
 
-      const duration = 60000;
+      const duration = 60000; // simulate progress duration
       const startTime = Date.now();
 
       const progressUpdater = () => {
@@ -151,15 +151,6 @@ function NewRecipe() {
       progressUpdater();
 
       setTimeout(() => {
-        setTitle("");
-        setDescription("");
-        setSections([
-          { name: "", ingredients: [{ name: "", quantity: "" }], instructions: [""] }
-        ]);
-        setCategory("");
-        setTags("");
-        setImage(null);
-        setErrors({});
         refreshRecipes();
       }, 500);
 
@@ -168,175 +159,173 @@ function NewRecipe() {
       console.error(err);
       setMessage(err.response?.data?.message || "Failed to upload recipe.");
       setProgress(0);
-    } finally {
       setSubmitting(false);
     }
   };
 
   return (
     <div className={styles.container}>
-      <h1>Create a New Recipe</h1>
-      <form onSubmit={handleSubmit} className={styles.form}>
-
-        {/* Title */}
-        <div className={styles.fieldGroup}>
-          <label>Title:</label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          {errors.title && <span className={styles.error}>{errors.title}</span>}
+      <h1>{submitting ? "Uploading Recipe..." : "Create a New Recipe"}</h1>
+      {submitting ? (
+        <div className={styles.progressBar}>
+          <div style={{ width: `${progress}%` }} />
+          <span className={styles.progressLabel}>{Math.round(progress)}%</span>
         </div>
+      ) : (
+        <form onSubmit={handleSubmit} className={styles.form}>
+          {/* Title */}
+          <div className={styles.fieldGroup}>
+            <label>Title:</label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            {errors.title && <span className={styles.error}>{errors.title}</span>}
+          </div>
 
-        {/* Description */}
-        <div className={styles.fieldGroup}>
-          <label>Short Description:</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Briefly describe your recipe..."
-            rows={3}
-          />
-          {errors.description && (
-            <span className={styles.error}>{errors.description}</span>
-          )}
-        </div>
+          {/* Description */}
+          <div className={styles.fieldGroup}>
+            <label>Short Description:</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Briefly describe your recipe..."
+              rows={3}
+            />
+            {errors.description && (
+              <span className={styles.error}>{errors.description}</span>
+            )}
+          </div>
 
-        {/* Category */}
-        <div className={styles.fieldGroup}>
-          <label>Category:</label>
-          <select value={category} onChange={(e) => setCategory(e.target.value)}>
-            <option value="">Select a category</option>
-            {categories.map((cat) => (
-              <option key={cat} value={cat}>{cat}</option>
-            ))}
-          </select>
-          {errors.category && <span className={styles.error}>{errors.category}</span>}
-        </div>
+          {/* Category */}
+          <div className={styles.fieldGroup}>
+            <label>Category:</label>
+            <select value={category} onChange={(e) => setCategory(e.target.value)}>
+              <option value="">Select a category</option>
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
+            {errors.category && <span className={styles.error}>{errors.category}</span>}
+          </div>
 
-        {/* Tags */}
-        <div className={styles.fieldGroup}>
-          <label>Tags (comma separated):</label>
-          <input
-            type="text"
-            value={tags}
-            onChange={(e) => setTags(e.target.value)}
-          />
-        </div>
+          {/* Tags */}
+          <div className={styles.fieldGroup}>
+            <label>Tags (comma separated):</label>
+            <input
+              type="text"
+              value={tags}
+              onChange={(e) => setTags(e.target.value)}
+            />
+          </div>
 
-        {/* Image */}
-        <div className={styles.fieldGroup}>
-          <label>Image:</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setImage(e.target.files[0])}
-          />
-          {errors.image && <span className={styles.error}>{errors.image}</span>}
-        </div>
+          {/* Image */}
+          <div className={styles.fieldGroup}>
+            <label>Image:</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setImage(e.target.files[0])}
+            />
+            {errors.image && <span className={styles.error}>{errors.image}</span>}
+          </div>
 
-        {/* Sections */}
-        {sections.map((section, sIndex) => (
-          <div key={sIndex} className={styles.section}>
-            <div className={styles.sectionHeader}>
-              <h3>Section {sIndex + 1}</h3>
-              {sections.length > 1 && (
-                <button
-                  type="button"
-                  onClick={() => removeSection(sIndex)}
-                  className={styles.removeSmallButton}
-                  title="Remove section"
-                >✖</button>
-              )}
-            </div>
-
-            <div className={styles.fieldGroup}>
-              <label>Section Name:</label>
-              <input
-                type="text"
-                value={section.name}
-                onChange={(e) => handleSectionChange(sIndex, "name", e.target.value)}
-              />
-              {errors[`sectionName${sIndex}`] && (
-                <span className={styles.error}>{errors[`sectionName${sIndex}`]}</span>
-              )}
-            </div>
-
-            <h4>Ingredients:</h4>
-            {section.ingredients.map((ing, iIndex) => (
-              <div key={iIndex} className={styles.ingredientRow}>
-                <div className={styles.fieldGroup}>
-                  <input
-                    type="text"
-                    placeholder="Name"
-                    value={ing.name}
-                    onChange={(e) =>
-                      handleIngredientChange(sIndex, iIndex, "name", e.target.value)
-                    }
-                  />
-                </div>
-                <div className={styles.fieldGroup}>
-                  <input
-                    type="text"
-                    placeholder="Quantity"
-                    value={ing.quantity}
-                    onChange={(e) =>
-                      handleIngredientChange(sIndex, iIndex, "quantity", e.target.value)
-                    }
-                  />
-                </div>
-                {section.ingredients.length > 1 && (
+          {/* Sections */}
+          {sections.map((section, sIndex) => (
+            <div key={sIndex} className={styles.section}>
+              <div className={styles.sectionHeader}>
+                <h3>Section {sIndex + 1}</h3>
+                {sections.length > 1 && (
                   <button
                     type="button"
-                    onClick={() => removeIngredient(sIndex, iIndex)}
+                    onClick={() => removeSection(sIndex)}
                     className={styles.removeSmallButton}
-                    title="Remove ingredient"
+                    title="Remove section"
                   >✖</button>
                 )}
-                {errors[`ingredient${sIndex}-${iIndex}`] && (
+              </div>
+
+              <div className={styles.fieldGroup}>
+                <label>Section Name:</label>
+                <input
+                  type="text"
+                  value={section.name}
+                  onChange={(e) => handleSectionChange(sIndex, "name", e.target.value)}
+                />
+                {errors[`sectionName${sIndex}`] && (
+                  <span className={styles.error}>{errors[`sectionName${sIndex}`]}</span>
+                )}
+              </div>
+
+              <h4>Ingredients:</h4>
+              {section.ingredients.map((ing, iIndex) => (
+                <div key={iIndex} className={styles.ingredientRow}>
+                  <div className={styles.fieldGroup}>
+                    <input
+                      type="text"
+                      placeholder="Name"
+                      value={ing.name}
+                      onChange={(e) =>
+                        handleIngredientChange(sIndex, iIndex, "name", e.target.value)
+                      }
+                    />
+                  </div>
+                  <div className={styles.fieldGroup}>
+                    <input
+                      type="text"
+                      placeholder="Quantity"
+                      value={ing.quantity}
+                      onChange={(e) =>
+                        handleIngredientChange(sIndex, iIndex, "quantity", e.target.value)
+                      }
+                    />
+                  </div>
+                  {section.ingredients.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeIngredient(sIndex, iIndex)}
+                      className={styles.removeSmallButton}
+                      title="Remove ingredient"
+                    >✖</button>
+                  )}
+                  {errors[`ingredient${sIndex}-${iIndex}`] && (
+                    <span className={styles.error}>
+                      {errors[`ingredient${sIndex}-${iIndex}`]}
+                    </span>
+                  )}
+                </div>
+              ))}
+              <button type="button" onClick={() => addIngredient(sIndex)} className={styles.addButton}>
+                ➕ Add Ingredient
+              </button>
+
+              <div className={styles.fieldGroup}>
+                <label>Instructions:</label>
+                <textarea
+                  value={section.instructions[0]}
+                  onChange={(e) => handleInstructionChange(sIndex, e.target.value)}
+                />
+                {errors[`instruction${sIndex}-0`] && (
                   <span className={styles.error}>
-                    {errors[`ingredient${sIndex}-${iIndex}`]}
+                    {errors[`instruction${sIndex}-0`]}
                   </span>
                 )}
               </div>
-            ))}
-            <button type="button" onClick={() => addIngredient(sIndex)} className={styles.addButton}>
-              ➕ Add Ingredient
-            </button>
-
-            <div className={styles.fieldGroup}>
-              <label>Instructions:</label>
-              <textarea
-                value={section.instructions[0]}
-                onChange={(e) => handleInstructionChange(sIndex, e.target.value)}
-              />
-              {errors[`instruction${sIndex}-0`] && (
-                <span className={styles.error}>
-                  {errors[`instruction${sIndex}-0`]}
-                </span>
-              )}
             </div>
-          </div>
-        ))}
+          ))}
 
-        <button type="button" onClick={addSection} className={styles.addButton}>
-          + Add Section
-        </button>
+          <button type="button" onClick={addSection} className={styles.addButton}>
+            + Add Section
+          </button>
 
-        <button type="submit" disabled={submitting} className={styles.submitButton}>
-          {submitting ? "Uploading..." : "Submit Recipe"}
-        </button>
+          <button type="submit" className={styles.submitButton}>
+            Submit Recipe
+          </button>
 
-        {progress > 0 && (
-          <div className={styles.progressBar}>
-            <div style={{ width: `${progress}%` }} />
-            <span className={styles.progressLabel}>{Math.round(progress)}%</span>
-          </div>
-        )}
-
-        {message && <p className={styles.message}>{message}</p>}
-      </form>
+          {message && <p className={styles.message}>{message}</p>}
+        </form>
+      )}
     </div>
   );
 }

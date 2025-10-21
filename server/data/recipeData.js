@@ -91,7 +91,7 @@ const recipes = [
 },
 {
   "title": "Grandma Irit’s Chocolate Cake",
-  "description": "A rich and moist chocolate cake made with dark chocolate, butter, and a smooth chocolate glaze — a classic family recipe.",
+  "description": "A rich and moist chocolate cake made with dark chocolate, butter, and a smooth chocolate glaze - a classic family recipe.",
   "image": "/uploads/Grandma Irit’s Chocolate Cake.jpg",
   "sections": [
     {
@@ -131,7 +131,7 @@ const recipes = [
 },
 {
   "title": "Butter Cookies",
-  "description": "Classic buttery cookies with a crisp edge and soft center — simple and delicious.",
+  "description": "Classic buttery cookies with a crisp edge and soft center - simple and delicious.",
   "image": "/uploads/Butter Cookies.jpg",
   "sections": [
     {
@@ -206,7 +206,7 @@ const recipes = [
 },
 {
   "title": "Chocolate Chip Cookies",
-  "description": "Crispy on the outside, soft on the inside — classic chocolate chip cookies.",
+  "description": "Crispy on the outside, soft on the inside - classic chocolate chip cookies.",
   "image": "/uploads/Chocolate Chip Cookies.jpg",
   "sections": [
     {
@@ -237,7 +237,7 @@ const recipes = [
 },
 {
   "title": "Maple Cake",
-  "description": "A soft and fragrant maple-flavored cake with banana and walnuts — sweet, moist, and full of aroma.",
+  "description": "A soft and fragrant maple-flavored cake with banana and walnuts - sweet, moist, and full of aroma.",
   "image": "/uploads/Maple Cake.jpg",
   "sections": [
     {
@@ -266,7 +266,7 @@ const recipes = [
 },
 {
   "title": "Grandma Irit’s Onion Quiche",
-  "description": "A rich and savory onion quiche with a buttery crust and a creamy, cheesy filling — a comforting family favorite.",
+  "description": "A rich and savory onion quiche with a buttery crust and a creamy, cheesy filling - a comforting family favorite.",
   "image": "/uploads/Onion Quiche.jpg",
   "sections": [
     {
@@ -311,7 +311,7 @@ const recipes = [
 },
 {
   "title": "Grandma Hela’s Honey Cake",
-  "description": "A rich and aromatic honey cake with coffee, cocoa, and apricot jam — soft, moist, and full of nostalgic flavor.",
+  "description": "A rich and aromatic honey cake with coffee, cocoa, and apricot jam - soft, moist, and full of nostalgic flavor.",
   "image": "/uploads/Honey-Cake.jpg",
   "sections": [
     {
