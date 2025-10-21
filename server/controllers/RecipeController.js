@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const getAllRecipes = async (req, res, next) => {
   try {
-    const { category, tags } = req.query; // now expecting "tags" param
+    const { category, tags, sort } = req.query;
     let filter = {};
 
     if (category) {
@@ -11,18 +11,25 @@ const getAllRecipes = async (req, res, next) => {
     }
 
     if (tags) {
-      // Split comma-separated tags and trim
       const tagsArray = tags.split(",").map(tag => tag.trim());
-      // $all ensures recipe contains all specified tags
       filter.tags = { $all: tagsArray };
     }
 
-    const recipes = await Recipe.find(filter).sort({ createdAt: -1 });
+    // Default: newest first
+    let sortOption = { createdAt: -1 };
+
+    // 🧠 Sorting logic
+    if (sort === "oldest") sortOption = { createdAt: 1 };
+    else if (sort === "az") sortOption = { title: 1 };
+    else if (sort === "za") sortOption = { title: -1 };
+
+    const recipes = await Recipe.find(filter).sort(sortOption);
     res.status(200).json({ recipes });
   } catch (err) {
     next(err);
   }
 };
+
 
 // Get a single recipe by ID
 const getSingleRecipe = async (req, res, next) => {
