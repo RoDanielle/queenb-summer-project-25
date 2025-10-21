@@ -24,10 +24,10 @@
   color: #333;
 }
 
-/* ✏️ Inputs and textareas */
-.form input,
-.form textarea,
-.form select {
+/* ✏️ Inputs, textareas, selects - default full width */
+.form > .fieldGroup input,
+.form > .fieldGroup textarea,
+.form > .fieldGroup select {
   width: 100%;
   padding: 10px 12px;
   margin-top: 6px;
@@ -35,12 +35,13 @@
   border-radius: 8px;
   font-size: 1rem;
   outline: none;
+  box-sizing: border-box;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.form input:focus,
-.form textarea:focus,
-.form select:focus {
+.form > .fieldGroup input:focus,
+.form > .fieldGroup textarea:focus,
+.form > .fieldGroup select:focus {
   border-color: var(--color-primary);
   box-shadow: 0 0 6px rgba(240, 171, 123, 0.4);
 }
@@ -80,31 +81,28 @@
   width: 100%;
 }
 
-/* Label styling */
 .fieldGroup label {
   font-weight: 600;
   margin-bottom: 0.25rem;
   color: #333;
 }
 
-/* Inputs, textareas, selects */
-.fieldGroup input,
-.fieldGroup textarea,
-.fieldGroup select {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
-  outline: none;
-  box-sizing: border-box;
+/* 🧩 Ingredient Row */
+.ingredientRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 0.5rem;
 }
 
-.fieldGroup input:focus,
-.fieldGroup textarea:focus,
-.fieldGroup select:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 6px rgba(240, 171, 123, 0.4);
+.ingredientRow .fieldGroup {
+  flex: 1; /* Ingredients take flexible width inside row */
+}
+
+/* ✏️ Inputs inside ingredient rows */
+.ingredientRow input {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* 🚀 Buttons */
@@ -156,6 +154,33 @@
   transform: translateY(-2px);
 }
 
+/* ✖ Small remove button for ingredients and sections */
+.removeSmallButton {
+  flex-shrink: 0;
+  background-color: #ffe5e5;
+  color: #c00;
+  border: 1px solid #ffcccc;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.removeSmallButton:hover {
+  background-color: #ffcccc;
+  transform: translateY(-1px);
+}
+
+/* 🗂 Section header with title and remove button aligned */
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
 /* 📊 Progress bar */
 .progressBar {
   width: 100%;
@@ -201,43 +226,4 @@ p,
   font-size: 0.9rem;
   margin-top: 4px;
   display: block;
-}
-
-/* 🧩 Ingredient Row */
-.ingredientRow {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  margin-bottom: 0.5rem;
-}
-
-.ingredientRow .fieldGroup {
-  flex: 1; /* Both name and quantity take equal width */
-}
-
-/* ✖ Small remove button for ingredients and sections */
-.removeSmallButton {
-  flex-shrink: 0;
-  background-color: #ffe5e5;
-  color: #c00;
-  border: 1px solid #ffcccc;
-  padding: 4px 8px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  line-height: 1;
-  transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
-.removeSmallButton:hover {
-  background-color: #ffcccc;
-  transform: translateY(-1px);
-}
-
-/* 🗂 Section header with title and remove button aligned */
-.sectionHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.75rem;
 }

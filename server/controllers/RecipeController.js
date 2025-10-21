@@ -45,7 +45,6 @@ const getSingleRecipe = async (req, res, next) => {
 };
 
 // Create a new recipe 
-// controllers/RecipeController.js
 const createRecipe = async (req, res, next) => {
   try {
     const { title, description, category } = req.body;

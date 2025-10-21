@@ -18,7 +18,7 @@ const recipeSchema = new mongoose.Schema(
       }
     ],
 
-    category: { type: String },
+    category: { type: String, required: true },
     tags: [{ type: String }],
   },
   { timestamps: true } // optional
