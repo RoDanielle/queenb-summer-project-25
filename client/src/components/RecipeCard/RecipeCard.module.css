@@ -1,102 +1,182 @@
 /* Base card */
 .recipeCard {
   background-color: #fff;
-  padding: 10px;
-  margin: 10px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  text-align: left;
-  transition: transform 0.2s;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
   display: flex;
   flex-direction: column;
   position: relative;
   font-family: var(--font-body);
   color: #333;
+  transition: transform 0.2s ease;
 }
 
-/* Hover effect */
 .recipeCard:hover {
   transform: translateY(-3px);
 }
 
-/* Compact cards (homepage grid) */
+/* ---------------- Compact cards (homepage grid) ---------------- */
 .compact {
-  height: 350px;
+  height: 350px; /* fixed height */
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* key: push button to bottom */
   overflow: hidden;
-}
-
-.compact h2 {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 1.2rem;
-}
-
-.compact p {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 0.9rem;
-}
-
-/* Full cards (detail page) */
-.full {
-  height: auto;
-  display: flex;
-  flex-direction: column;
-}
-
-.full h2,
-.full p {
-  white-space: normal;
-  overflow: visible;
-  text-overflow: unset;
-  font-size: 1.5rem;
-}
-
-/* 📝 Wrap long words to prevent overflow */
-.full p,
-.full .section p,
-.full .section h4 {
-  overflow-wrap: break-word;
-  word-break: break-word;
+  border-radius: 12px;
+  background-color: #fff;
+  position: relative;
 }
 
 /* Image */
-.recipeImage {
-  width: 100%;
+.compact .recipeImage {
   height: 150px;
+  width: 100%;
   object-fit: cover;
-  border-radius: 10px 10px 0 0;
-  margin-bottom: 8px;
+  border-radius: 12px 12px 0 0;
+}
+
+/* Card header (title + description) */
+.compact .cardHeader {
+  flex-grow: 1; /* fills space above button */
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  text-align: left; /* left-align text */
+}
+
+/* Title */
+.compact h2 {
+  font-size: 1.2rem;
+  margin: 6px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Description (truncated to 3 lines) */
+.compact p {
+  font-size: 0.9rem;
+  margin: 4px 0;
+  text-align: left;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+
+  /* Clamp 3 lines */
+  -webkit-line-clamp: 3;   /* WebKit */
+  line-clamp: 3;            /* standard property for compatible browsers */
+
+  overflow: hidden;
+
+  /* fixed height for consistent layout */
+  line-height: 1.2rem;      
+  height: 3.6rem;           /* line-height * 3 */
+}
+
+/* Footer button (fixed at bottom) */
+.compact .cardFooter {
+  padding: 12px;
+  margin-top: auto; /* pushes button to bottom */
+}
+
+/* ---------------- Full cards (detail page) ---------------- */
+.full {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .full .recipeImage {
-  height: auto;
+  width: 100%;
+  max-height: 500px;
+  object-fit: cover;
+  border-radius: 16px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.15);
 }
 
-/* Buttons inside cards */
-.recipeCard .button {
-  margin-top: 0; /* no need auto because we're using justify-content */
-  align-self: stretch; /* full width */
-  padding: 6px 12px;
-  font-size: 0.9rem;
-  font-family: var(--font-body);
-  border-radius: 8px;
+
+.full h2 {
+  font-size: 2rem;
+  margin: 8px 0;
+  color: var(--color-primary);
   text-align: center;
+}
+
+.full p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin: 6px 0;
+}
+
+.full h2,
+.full p,
+.full .tagList {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+/* Section blocks */
+.full .section {
+  background-color: #fff7f0;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.full .section h3 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  border-bottom: 2px solid rgba(240,171,123,0.4);
+  padding-bottom: 4px;
+  color: var(--color-primary-dark);
+}
+
+.full .section h4 {
+  font-size: 1.2rem;
+  margin: 8px 0 4px 0;
+  color: #333;
+}
+
+.full .ingredients,
+.full .instructions {
+  list-style-type: disc;
+  padding-left: 1.6rem;
+  margin: 4px 0 8px 0;
+}
+
+.full .ingredients li,
+.full .instructions li {
+  margin-bottom: 0.5rem;
+}
+
+/* Tags */
+.full .tagList {
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.full .tag {
+  background-color: #fef4ed;
+  color: var(--color-primary-dark);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 1px solid rgba(240,171,123,0.5);
+  transition: all 0.2s ease;
+}
+
+.full .tag:hover {
   background-color: var(--color-primary);
-  color: white;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+  color: #fff;
+  transform: scale(1.05);
 }
 
-.recipeCard .button:hover {
-  background-color: var(--color-primary-dark);
-  transform: translateY(-2px);
-}
-
-/* Favorite Button */
+/* ---------------- Favorite button ---------------- */
 .favoriteButton {
   position: absolute;
   top: 10px;
@@ -119,42 +199,50 @@
   color: red;
 }
 
-/* Responsive adjustments */
+/* ---------------- Buttons ---------------- */
+.recipeCard .button {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  background-color: var(--color-primary);
+  color: white;
+  text-align: center;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.recipeCard .button:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-2px);
+}
+
+/* ---------------- Responsive ---------------- */
 @media (max-width: 600px) {
-  .recipeCard {
-    padding: 8px;
+  .compact .recipeImage {
+    height: 120px;
   }
 
-  .recipeCard h2 {
-    font-size: 1rem;
+  .full h2 {
+    font-size: 1.6rem;
   }
 
-  .recipeCard h4 {
-    font-size: 0.9rem;
+  .full .section h3 {
+    font-size: 1.3rem;
   }
 
-  .recipeCard p {
-    font-size: 0.85rem;
-  }
-
-  .recipeImage {
-    height: 100px;
-  }
-
-  .recipeCard .button {
-    padding: 5px 10px;
-    font-size: 0.8rem;
+  .full .section h4 {
+    font-size: 1.1rem;
   }
 }
 
 @media (max-width: 400px) {
   .recipeCard {
-    margin: 5px;
+    margin: 6px;
   }
 
   .recipeCard .button {
-    padding: 4px 8px;
-    font-size: 0.75rem;
+    padding: 6px 10px;
+    font-size: 0.8rem;
   }
 
   .favoriteButton {
